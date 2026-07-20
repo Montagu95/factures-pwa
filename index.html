@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cabinet Ouvertures Psy — Yolène Meignant</title>
+  <meta name="description" content="Cabinet de psychologie clinique — Yolène Meignant, psychologue clinicienne à Groslay (95). Réédition de facture en ligne." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #1a3a5c;
+      --blue:   #3b6fa0;
+      --light:  #e8f0f8;
+      --sage:   #7a9e7e;
+      --cream:  #faf8f5;
+      --text:   #2d3748;
+      --muted:  #718096;
+      --border: #e2e8f0;
+      --white:  #ffffff;
+      --danger: #c53030;
+      --success:#276749;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .nav-inner {
+      max-width: 960px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--navy); text-decoration: none;
+    }
+    .nav-brand span { font-weight: 400; font-style: italic; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: 0.875rem; color: var(--muted);
+      text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+      color: white; padding: 80px 24px 60px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 20px; padding: 4px 16px;
+      font-size: 0.8rem; letter-spacing: .5px;
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 600; margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .hero h1 em { font-style: italic; font-weight: 400; }
+    .hero p {
+      font-size: 1.05rem; opacity: .85;
+      max-width: 520px; margin: 0 auto 32px;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: white; color: var(--navy);
+      font-weight: 600; font-size: 0.9rem;
+      padding: 13px 28px; border-radius: 6px;
+      text-decoration: none; transition: transform .2s;
+    }
+    .hero-cta:hover { transform: translateY(-1px); }
+
+    /* ── Sections ── */
+    section { padding: 64px 24px; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
+    .section-title {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem; color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      color: var(--muted); margin-bottom: 40px;
+      font-size: 0.95rem;
+    }
+    .divider { width: 48px; height: 3px; background: var(--sage); border-radius: 2px; margin: 12px 0 32px; }
+
+    /* ── À propos ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center;
+    }
+    @media (max-width: 640px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text p { color: var(--muted); margin-bottom: 14px; font-size: 0.95rem; }
+    .about-info {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px;
+    }
+    .info-item { display: flex; gap: 12px; margin-bottom: 16px; }
+    .info-item:last-child { margin-bottom: 0; }
+    .info-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .info-value { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+
+    /* ── Approche ── */
+    .approche { background: var(--white); }
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .tag {
+      background: var(--light); color: var(--navy);
+      border-radius: 20px; padding: 6px 16px;
+      font-size: 0.85rem;
+    }
+
+    /* ── Facture ── */
+    .facture-section { background: var(--cream); }
+    .facture-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px;
+      max-width: 560px;
+    }
+    .facture-card h3 {
+      font-family: 'Lora', serif;
+      font-size: 1.3rem; color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .facture-card .desc {
+      font-size: 0.875rem; color: var(--muted);
+      margin-bottom: 28px; line-height: 1.5;
+    }
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: 0.8rem;
+      font-weight: 500; color: var(--text);
+      margin-bottom: 6px; text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .field input {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text); background: var(--cream);
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+    }
+    .field input:focus {
+      outline: none; border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59,111,160,.12);
+      background: white;
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--navy); color: white;
+      border: none; border-radius: 8px;
+      font-size: 0.95rem; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: background .2s, transform .1s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { background: var(--blue); }
+    .btn-submit:active { transform: scale(.99); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      border-radius: 8px; padding: 14px 16px;
+      font-size: 0.875rem; margin-top: 16px;
+      display: none; line-height: 1.5;
+    }
+    .alert.success {
+      background: #f0fdf4; border: 1px solid #86efac;
+      color: var(--success); display: block;
+    }
+    .alert.error {
+      background: #fff5f5; border: 1px solid #feb2b2;
+      color: var(--danger); display: block;
+    }
+    .alert.info {
+      background: #fffbeb; border: 1px solid #fcd34d;
+      color: #92400e; display: block;
+    }
+
+    /* ── Contact ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px; margin-top: 8px;
+    }
+    .contact-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px;
+      text-align: center;
+    }
+    .contact-card .icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .contact-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
+    .contact-card .value { font-size: 0.9rem; font-weight: 500; color: var(--navy); }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,.6);
+      text-align: center; padding: 28px 24px;
+      font-size: 0.8rem;
+    }
+    footer strong { color: white; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">Ouvertures Psy <span>— Yolène Meignant</span></a>
+    <div class="nav-links">
+      <a href="#apropos">À propos</a>
+      <a href="#approche">Approche</a>
+      <a href="#facture">Facture</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">Psychologue clinicienne</div>
+  <h1>Cabinet <em>Ouvertures Psy</em></h1>
+  <p>Un espace d'écoute et d'accompagnement pour vous aider à traverser les moments difficiles de la vie.</p>
+  <a href="#facture" class="hero-cta">Obtenir ma facture</a>
+</div>
+
+<!-- À propos -->
+<section id="apropos">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="section-title">Yolène Meignant</p>
+        <div class="divider"></div>
+        <p>Psychologue clinicienne inscrite à l'ADELI, j'exerce en cabinet libéral à Groslay depuis plusieurs années.</p>
+        <p>Je reçois enfants, adolescents et adultes pour des consultations individuelles, en accompagnant chacun dans une démarche personnalisée et bienveillante.</p>
+        <p>Mon travail s'inscrit dans une approche intégrative, tenant compte de la singularité de chaque personne.</p>
+      </div>
+      <div class="about-info">
+        <div class="info-item">
+          <div class="info-icon">🎓</div>
+          <div>
+            <div class="info-label">Titre</div>
+            <div class="info-value">Psychologue clinicienne</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🏛️</div>
+          <div>
+            <div class="info-label">N° ADELI</div>
+            <div class="info-value">95 93 1263 8</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-label">Cabinet</div>
+            <div class="info-value">55 Rue du Général Leclerc<br/>95410 Groslay</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🏢</div>
+          <div>
+            <div class="info-label">SIRET</div>
+            <div class="info-value">450 801 188</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Approche -->
+<section id="approche" class="approche">
+  <div class="section-inner">
+    <p class="section-title">Mon approche</p>
+    <div class="divider"></div>
+    <p class="section-sub">Un accompagnement adapté à chaque personne, dans un cadre confidentiel et bienveillant.</p>
+    <p style="color:var(--muted);font-size:.95rem;max-width:640px">Je propose des consultations pour aborder différentes problématiques : anxiété, dépression, difficultés relationnelles, deuil, accompagnement parental, troubles de l'enfant ou de l'adolescent, questionnements identitaires...</p>
+    <div class="tags">
+      <span class="tag">Adultes</span>
+      <span class="tag">Adolescents</span>
+      <span class="tag">Enfants</span>
+      <span class="tag">Anxiété</span>
+      <span class="tag">Dépression</span>
+      <span class="tag">Deuil</span>
+      <span class="tag">Accompagnement parental</span>
+      <span class="tag">Troubles du comportement</span>
+      <span class="tag">Bilan psychologique</span>
+    </div>
+  </div>
+</section>
+
+<!-- Facture -->
+<section id="facture" class="facture-section">
+  <div class="section-inner">
+    <p class="section-title">Obtenir ma facture</p>
+    <div class="divider"></div>
+    <p class="section-sub">Renseignez les informations ci-dessous pour recevoir votre facture par email.</p>
+
+    <div class="facture-card">
+      <h3>Demande de facture</h3>
+      <p class="desc">Veuillez renseigner vos informations telles qu'elles ont été enregistrées lors de votre consultation. La facture vous sera envoyée à l'adresse email indiquée.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Prénom</label>
+          <input type="text" id="prenom" placeholder="Marie" autocomplete="given-name" />
+        </div>
+        <div class="field">
+          <label>Nom</label>
+          <input type="text" id="nom" placeholder="Dupont" autocomplete="family-name" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Adresse email</label>
+        <input type="email" id="email" placeholder="marie.dupont@email.fr" autocomplete="email" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Date de consultation</label>
+          <input type="date" id="dateConsultation" />
+        </div>
+        <div class="field">
+          <label>Montant (€)</label>
+          <input type="number" id="montant" placeholder="60.00" min="0.50" step="0.01" inputmode="decimal" />
+        </div>
+      </div>
+
+      <button class="btn-submit" id="btnSubmit" onclick="demanderFacture()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        Recevoir ma facture par email
+      </button>
+
+      <div class="alert" id="alertBox"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="section-title">Contact</p>
+    <div class="divider"></div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="icon">📧</div>
+        <div class="label">Email</div>
+        <div class="value">cabinet@ouvertures-psy.online</div>
+      </div>
+      <div class="contact-card">
+        <div class="icon">📍</div>
+        <div class="label">Adresse</div>
+        <div class="value">55 Rue du Général Leclerc<br/>95410 Groslay</div>
+      </div>
+      <div class="contact-card">
+        <div class="icon">🕐</div>
+        <div class="label">Consultations</div>
+        <div class="value">Sur rendez-vous uniquement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Cabinet Ouvertures Psy</strong> — Yolène Meignant, psychologue clinicienne<br/>
+  ADELI 95 93 1263 8 · SIRET 450 801 188 · 55 Rue du Général Leclerc, 95410 Groslay
+</footer>
+
+<script>
+async function demanderFacture() {
+  const prenom          = document.getElementById('prenom').value.trim();
+  const nom             = document.getElementById('nom').value.trim();
+  const email           = document.getElementById('email').value.trim();
+  const dateConsultation= document.getElementById('dateConsultation').value;
+  const montant         = document.getElementById('montant').value.trim();
+  const btn             = document.getElementById('btnSubmit');
+  const alertBox        = document.getElementById('alertBox');
+
+  // Reset
+  alertBox.className = 'alert';
+  alertBox.textContent = '';
+
+  // Validation locale
+  if (!prenom || !nom) return showAlert('error', 'Veuillez indiquer votre prénom et votre nom.');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert('error', 'Adresse email invalide.');
+  if (!dateConsultation) return showAlert('error', 'Veuillez indiquer la date de votre consultation.');
+  if (!montant || parseFloat(montant) <= 0) return showAlert('error', 'Veuillez indiquer le montant de la consultation.');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Recherche en cours…';
+
+  try {
+    const res  = await fetch('/api/reissue-invoice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prenom, nom, email, dateConsultation, montant })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showAlert('error', data.error || 'Une erreur est survenue. Veuillez réessayer.');
+      return;
+    }
+
+    if (data.success) {
+      showAlert('success', '✓ ' + data.message);
+      // Réinitialiser le formulaire
+      ['prenom','nom','email','dateConsultation','montant'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+    } else {
+      showAlert('info', 'ℹ️ ' + data.message);
+    }
+
+  } catch (e) {
+    showAlert('error', 'Erreur de connexion. Veuillez réessayer dans quelques instants.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg> Recevoir ma facture par email';
+    if (!document.querySelector('.alert.error')) alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+function showAlert(type, msg) {
+  const alertBox = document.getElementById('alertBox');
+  alertBox.className = 'alert ' + type;
+  alertBox.textContent = msg;
+  alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Initialiser la date max à aujourd'hui
+document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
+</script>
+
+</body>
+</html>
