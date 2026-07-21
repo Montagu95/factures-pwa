@@ -230,6 +230,17 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST')    return res.status(405).json({ error: 'Méthode non autorisée' });
 
+  // Vérification variables d'environnement
+  const missingVars = [];
+  if (!process.env.UPSTASH_REDIS_REST_URL)  missingVars.push('UPSTASH_REDIS_REST_URL');
+  if (!process.env.UPSTASH_REDIS_REST_TOKEN) missingVars.push('UPSTASH_REDIS_REST_TOKEN');
+  if (!process.env.ENCRYPTION_KEY)          missingVars.push('ENCRYPTION_KEY');
+  if (!process.env.SMTP_HOST)               missingVars.push('SMTP_HOST');
+  if (missingVars.length > 0) {
+    console.error('[reissue] Variables manquantes:', missingVars.join(', '));
+    return res.status(500).json({ error: 'Configuration serveur incomplete: ' + missingVars.join(', ') });
+  }
+  console.log('[reissue] Requete recue pour:', req.body?.prenom, req.body?.nom);
   const { prenom, nom, email, dateConsultation, montant } = req.body || {};
 
   // Validation des champs
@@ -367,7 +378,7 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error('[reissue]', err.message);
-    return res.status(500).json({ error: 'Erreur serveur — veuillez réessayer ultérieurement' });
+    console.error('[reissue] ERREUR COMPLETE:', err.message, err.stack);
+    return res.status(500).json({ error: 'Erreur serveur — veuillez reessayer ulterieurement', detail: err.message });
   }
 };
