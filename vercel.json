@@ -1,13 +1,8 @@
 {
   "version": 2,
+  "outputDirectory": "public",
   "rewrites": [
-    {
-      "source": "/api/reissue-invoice",
-      "destination": "/api/reissue-invoice.js"
-    },
-    {
-      "source": "/api/contact",
-      "destination": "/api/contact.js"
-    }
+    { "source": "/api/reissue-invoice", "destination": "/api/reissue-invoice.js" },
+    { "source": "/api/contact",         "destination": "/api/contact.js" }
   ]
 }
