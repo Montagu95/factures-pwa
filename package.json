@@ -1,6 +1,6 @@
 {
   "name": "facture-pwa",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Site cabinet Ouvertures Psy — réédition de factures",
   "dependencies": {
     "nodemailer": "^6.9.0",
