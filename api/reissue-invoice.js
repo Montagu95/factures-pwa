@@ -68,8 +68,28 @@ function montantCorrespond(facture, montantSaisi) {
 }
 
 // ─── Vérification date (±3 jours de tolérance) ───────────────────────────────
+// La date de consultation est dans lines[0].description (format "DD/MM/YYYY" ou ISO)
+// invoiceDate est la date d'émission, pas de consultation
+function parseDateDescription(desc) {
+  if (!desc) return null;
+  // Format français DD/MM/YYYY
+  const frMatch = desc.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (frMatch) {
+    return new Date(
+      parseInt(frMatch[3]),
+      parseInt(frMatch[2]) - 1,
+      parseInt(frMatch[1])
+    );
+  }
+  // Format ISO ou autre
+  const d = new Date(desc);
+  return isNaN(d) ? null : d;
+}
+
 function dateCorrespond(facture, dateSaisie) {
-  const fd = new Date(facture.invoiceDate || facture.createdAt);
+  // Chercher la date dans lines[0].description en priorité
+  const descDate = parseDateDescription((facture.lines || [])[0]?.description);
+  const fd = descDate || new Date(facture.invoiceDate || facture.createdAt);
   const ds = new Date(dateSaisie);
   if (isNaN(fd) || isNaN(ds)) return false;
   return Math.abs(fd - ds) <= 3 * 24 * 60 * 60 * 1000;
