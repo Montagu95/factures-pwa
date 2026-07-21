@@ -10,7 +10,40 @@ try {
   require('dotenv').config({ path: require('path').resolve(process.cwd(), '.env.local') });
 } catch (e) {}
 
-const nodemailer = require('nodemailer');
+const nodemailer        = require('nodemailer');
+const { checkRateLimit } = require('../lib/rate-limit');
+const { decrypt }        = require('../lib/crypto-utils');
+
+// ─── Vérification patient ────────────────────────────────────────────────────
+const REDIS_URL   = process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+async function redisGet(key) {
+  const res = await fetch(REDIS_URL, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(['GET', key])
+  });
+  const data = await res.json();
+  if (data.error) throw new Error('Redis: ' + data.error);
+  return data.result;
+}
+
+function normalize(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+}
+
+async function patientExiste(prenom, nom) {
+  const raw = await redisGet('invoice:patients');
+  if (!raw) return false;
+  const isEnc = typeof raw === 'string' && raw.startsWith('enc:v1:');
+  const patients = isEnc ? decrypt(raw) : (Array.isArray(raw) ? raw : JSON.parse(raw));
+  if (!Array.isArray(patients)) return false;
+  return patients.some(p =>
+    normalize(p.prenom) === normalize(prenom) &&
+    normalize(p.nom)    === normalize(nom)
+  );
+}
 
 function createTransport() {
   return nodemailer.createTransport({
@@ -31,7 +64,24 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST')    return res.status(405).json({ error: 'Méthode non autorisée' });
 
-  const { prenom, nom, email, sujet, message } = req.body || {};
+  const { prenom, nom, email, sujet, message, website } = req.body || {};
+
+  // Honeypot : si rempli → bot silencieux
+  if (website) { console.warn('[contact] Honeypot bot detecte'); return res.status(200).json({ ok: true }); }
+
+  // Rate limiting : 10 messages par IP par heure
+  const rl = await checkRateLimit(req, 'contact', 10, 3600);
+  if (!rl.ok) return res.status(429).json({ error: rl.message });
+
+  // Vérification patient : réservé aux patients déjà suivis
+  const estPatient = await patientExiste(prenom, nom);
+  if (!estPatient) {
+    console.log('[contact] Patient non identifie:', prenom, nom);
+    return res.status(403).json({
+      error: 'Ce formulaire est reserve aux patients deja suivis au cabinet. Pour une premiere prise de contact, merci de nous appeler directement.'
+    });
+  }
+  console.log('[contact] Patient identifie:', prenom, nom);
 
   if (!prenom || !nom || !email || !sujet || !message) {
     return res.status(400).json({ error: 'Tous les champs sont requis' });

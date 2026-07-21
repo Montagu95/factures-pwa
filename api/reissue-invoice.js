@@ -16,6 +16,7 @@ try {
 } catch (e) {}
 
 const nodemailer        = require('nodemailer');
+const { checkRateLimit } = require('../lib/rate-limit');
 const { decrypt }       = require('../lib/crypto-utils');
 const { generateInvoicePDF } = require('../lib/pdf-server');
 
@@ -241,7 +242,14 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Configuration serveur incomplete: ' + missingVars.join(', ') });
   }
   console.log('[reissue] Requete recue pour:', req.body?.prenom, req.body?.nom);
-  const { prenom, nom, email, dateConsultation, montant } = req.body || {};
+  const { prenom, nom, email, dateConsultation, montant, website } = req.body || {};
+
+  // Honeypot : si rempli → bot silencieux
+  if (website) { console.warn('[reissue] Honeypot bot detecte'); return res.status(200).json({ success: false, message: 'Demande enregistree.' }); }
+
+  // Rate limiting : 5 demandes par IP par heure
+  const rl = await checkRateLimit(req, 'facture', 5, 3600);
+  if (!rl.ok) return res.status(429).json({ error: rl.message });
 
   // Validation des champs
   if (!prenom || !nom || !email || !dateConsultation || !montant) {
@@ -254,7 +262,8 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Montant invalide' });
   }
 
-  const patientName = `${prenom} ${nom}`;
+  const patientName  = `${prenom} ${nom}`;
+  const startTime    = Date.now(); // Pour le timing constant
 
   try {
     // ── 1. Chercher le patient ────────────────────────────────────────
@@ -372,9 +381,11 @@ module.exports = async function handler(req, res) {
       sendAlertEmailPraticien(patientName, email, dateConsultation, montant, raison)
     ]);
 
+    const elapsed2 = Date.now() - startTime;
+    if (elapsed2 < 1500) await new Promise(r => setTimeout(r, 1500 - elapsed2));
     return res.status(200).json({
       success: false,
-      message: `Nous n'avons pas pu retrouver cette facture. Un email de confirmation vous a été envoyé et le praticien prendra contact avec vous.`
+      message: `Nous n\'avons pas pu retrouver cette facture. Un email de confirmation vous a ete envoye et le praticien prendra contact avec vous.`
     });
 
   } catch (err) {

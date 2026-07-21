@@ -402,6 +402,12 @@
       font-size: .85rem; color: var(--muted); margin-bottom: 22px;
     }
 
+    /* ── Anti-spam ── */
+    .honeypot { position:absolute; left:-9999px; top:-9999px; opacity:0; height:0; width:0; overflow:hidden; }
+    .human-check { display:flex; align-items:center; gap:10px; margin:16px 0 4px; cursor:pointer; user-select:none; }
+    .human-check input[type="checkbox"] { width:20px; height:20px; accent-color:var(--rose); cursor:pointer; flex-shrink:0; }
+    .human-check span { font-size:.88rem; color:var(--muted); }
+
     /* ── Footer ── */
     footer {
       background: var(--mauve); color: rgba(255,255,255,.65);
@@ -410,6 +416,7 @@
     }
     footer strong { color: white; }
   </style>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -643,6 +650,16 @@
           </div>
         </div>
 
+        <!-- Honeypot invisible — rempli uniquement par les bots -->
+        <div class="honeypot" aria-hidden="true">
+          <label>Ne pas remplir ce champ</label>
+          <input type="text" id="hpFacture" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Checkbox humain -->
+        <label class="human-check">
+          <input type="checkbox" id="humanFacture" />
+          <span>Je confirme être un humain et ne pas utiliser un robot</span>
+        </label>
         <button class="btn-submit" id="btnSubmit" onclick="demanderFacture()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
           Recevoir ma facture par email
@@ -661,7 +678,11 @@
         <p class="section-tag">Me contacter</p>
         <h2 class="section-title">Prendre rendez-vous</h2>
         <div class="divider"></div>
-        <p style="color:var(--muted);font-size:.93rem;margin-bottom:24px">Les consultations ont lieu sur rendez-vous uniquement. N'hésitez pas à m'écrire pour toute demande d'information ou de prise en charge.</p>
+        <p style="color:var(--muted);font-size:.93rem;margin-bottom:12px">Les consultations ont lieu sur rendez-vous uniquement.</p>
+        <div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:.88rem;color:#92400e;line-height:1.6;">
+          <strong>⚠️ Formulaire réservé aux patients suivis</strong><br/>
+          Ce formulaire de contact est exclusivement réservé aux patients déjà suivis au cabinet. Pour une première prise de contact ou une nouvelle demande de prise en charge, merci de nous joindre directement par téléphone.
+        </div>
         <div class="contact-infos">
           <div class="contact-card">
             <div class="icon">📍</div>
@@ -683,7 +704,7 @@
 
       <div class="contact-form-card">
         <h3>Envoyer un message</h3>
-        <p class="desc">Je vous répondrai dans les meilleurs délais.</p>
+        <p class="desc">Réservé aux patients déjà suivis. Indiquez votre prénom et nom tels qu'enregistrés au cabinet.</p>
         <div class="field-row">
           <div class="field">
             <label>Prénom</label>
@@ -709,6 +730,16 @@
             onfocus="this.style.outline='none';this.style.borderColor='var(--rose)';this.style.boxShadow='0 0 0 3px rgba(201,116,143,.12)';this.style.background='white'"
             onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"></textarea>
         </div>
+        <!-- Honeypot invisible -->
+        <div class="honeypot" aria-hidden="true">
+          <label>Ne pas remplir ce champ</label>
+          <input type="text" id="hpContact" name="url" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Checkbox humain -->
+        <label class="human-check">
+          <input type="checkbox" id="humanContact" />
+          <span>Je confirme être un humain et ne pas utiliser un robot</span>
+        </label>
         <button class="btn-submit" id="btnContact" onclick="envoyerContact()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Envoyer le message
@@ -728,6 +759,22 @@
 </footer>
 
 <script>
+// ── Anti-spam helpers ────────────────────────────────────────────────────────
+function checkHuman(hpId, checkId, alertFn) {
+  // Honeypot : si rempli → bot
+  if (document.getElementById(hpId).value) {
+    console.warn('[anti-spam] Honeypot declenche');
+    return false;
+  }
+  // Checkbox : doit être cochée
+  if (!document.getElementById(checkId).checked) {
+    alertFn('error', 'Veuillez confirmer que vous etes un humain.');
+    return false;
+  }
+  return true;
+}
+
+// ── Formulaire facture ────────────────────────────────────────────────────────
 async function demanderFacture() {
   const prenom           = document.getElementById('prenom').value.trim();
   const nom              = document.getElementById('nom').value.trim();
@@ -744,6 +791,7 @@ async function demanderFacture() {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert('error', 'Adresse email invalide.');
   if (!dateConsultation) return showAlert('error', 'Veuillez indiquer la date de votre consultation.');
   if (!montant || parseFloat(montant) <= 0) return showAlert('error', 'Veuillez indiquer le montant de la consultation.');
+  if (!checkHuman('hpFacture', 'humanFacture', showAlert)) return;
 
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Recherche en cours...';
@@ -764,6 +812,7 @@ async function demanderFacture() {
       ['prenom','nom','email','dateConsultation','montant'].forEach(function(id) {
         document.getElementById(id).value = '';
       });
+      document.getElementById('humanFacture').checked = false;
     } else {
       showAlert('info', '\u2139\ufe0f ' + data.message);
     }
@@ -782,6 +831,7 @@ function showAlert(type, msg) {
   alertBox.textContent = msg;
 }
 
+// ── Formulaire contact ────────────────────────────────────────────────────────
 async function envoyerContact() {
   const prenom  = document.getElementById('contactPrenom').value.trim();
   const nom     = document.getElementById('contactNom').value.trim();
@@ -798,6 +848,7 @@ async function envoyerContact() {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showContactAlert('error', 'Adresse email invalide.');
   if (!sujet)            return showContactAlert('error', 'Veuillez indiquer un sujet.');
   if (!message)          return showContactAlert('error', 'Veuillez ecrire votre message.');
+  if (!checkHuman('hpContact', 'humanContact', showContactAlert)) return;
 
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Envoi en cours...';
@@ -809,11 +860,16 @@ async function envoyerContact() {
       body: JSON.stringify({ prenom, nom, email, sujet, message })
     });
     const data = await res.json();
+    if (res.status === 403) {
+      showContactAlert('info', data.error);
+      return;
+    }
     if (!res.ok) throw new Error(data.error || 'Erreur');
     showContactAlert('success', '\u2713 Votre message a bien ete envoye. Je vous repondrai dans les meilleurs delais.');
     ['contactPrenom','contactNom','contactEmail','contactSujet','contactMessage'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
+    document.getElementById('humanContact').checked = false;
   } catch (e) {
     showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
