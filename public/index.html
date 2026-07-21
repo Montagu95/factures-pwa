@@ -740,13 +740,13 @@ async function demanderFacture() {
   alertBox.className = 'alert';
   alertBox.textContent = '';
 
-  if (!prenom || !nom)         return showAlert('error', 'Veuillez indiquer votre prénom et votre nom.');
+  if (!prenom || !nom)   return showAlert('error', 'Veuillez indiquer votre prenom et votre nom.');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAlert('error', 'Adresse email invalide.');
-  if (!dateConsultation)       return showAlert('error', 'Veuillez indiquer la date de votre consultation.');
+  if (!dateConsultation) return showAlert('error', 'Veuillez indiquer la date de votre consultation.');
   if (!montant || parseFloat(montant) <= 0) return showAlert('error', 'Veuillez indiquer le montant de la consultation.');
 
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Recherche en cours…';
+  btn.innerHTML = '<div class="spinner"></div> Recherche en cours...';
 
   try {
     const res  = await fetch('/api/reissue-invoice', {
@@ -755,25 +755,23 @@ async function demanderFacture() {
       body: JSON.stringify({ prenom, nom, email, dateConsultation, montant })
     });
     const data = await res.json();
-
     if (!res.ok) {
-      showAlert('error', data.error || 'Une erreur est survenue. Veuillez réessayer.');
+      showAlert('error', data.error || 'Une erreur est survenue. Veuillez reessayer.');
       return;
     }
-
     if (data.success) {
       showAlert('success', '\u2713 ' + data.message);
-      ['prenom','nom','email','dateConsultation','montant'].forEach(id => {
+      ['prenom','nom','email','dateConsultation','montant'].forEach(function(id) {
         document.getElementById(id).value = '';
       });
     } else {
       showAlert('info', '\u2139\ufe0f ' + data.message);
     }
   } catch (e) {
-    showAlert('error', 'Erreur de connexion. Veuillez réessayer dans quelques instants.');
+    showAlert('error', 'Erreur de connexion. Veuillez reessayer dans quelques instants.');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg> Recevoir ma facture par email';
+    btn.innerHTML = 'Recevoir ma facture par email';
     alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
@@ -784,8 +782,6 @@ function showAlert(type, msg) {
   alertBox.textContent = msg;
 }
 
-document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
-
 async function envoyerContact() {
   const prenom  = document.getElementById('contactPrenom').value.trim();
   const nom     = document.getElementById('contactNom').value.trim();
@@ -793,18 +789,18 @@ async function envoyerContact() {
   const sujet   = document.getElementById('contactSujet').value.trim();
   const message = document.getElementById('contactMessage').value.trim();
   const btn     = document.getElementById('btnContact');
-  const alert   = document.getElementById('alertContact');
+  const alrt    = document.getElementById('alertContact');
 
-  alert.className = 'alert';
-  alert.textContent = '';
+  alrt.className = 'alert';
+  alrt.textContent = '';
 
-  if (!prenom || !nom)   return showContactAlert('error', 'Veuillez indiquer votre prénom et votre nom.');
+  if (!prenom || !nom)   return showContactAlert('error', 'Veuillez indiquer votre prenom et votre nom.');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showContactAlert('error', 'Adresse email invalide.');
   if (!sujet)            return showContactAlert('error', 'Veuillez indiquer un sujet.');
-  if (!message)          return showContactAlert('error', 'Veuillez écrire votre message.');
+  if (!message)          return showContactAlert('error', 'Veuillez ecrire votre message.');
 
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Envoi en cours…';
+  btn.innerHTML = '<div class="spinner"></div> Envoi en cours...';
 
   try {
     const res  = await fetch('/api/contact', {
@@ -814,15 +810,15 @@ async function envoyerContact() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erreur');
-    showContactAlert('success', '✓ Votre message a bien été envoyé. Je vous répondrai dans les meilleurs délais.');
-    ['contactPrenom','contactNom','contactEmail','contactSujet','contactMessage'].forEach(id => {
+    showContactAlert('success', '\u2713 Votre message a bien ete envoye. Je vous repondrai dans les meilleurs delais.');
+    ['contactPrenom','contactNom','contactEmail','contactSujet','contactMessage'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
   } catch (e) {
-    showContactAlert('error', 'Erreur d'envoi. Veuillez réessayer.');
+    showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Envoyer le message';
+    btn.innerHTML = 'Envoyer le message';
   }
 }
 
@@ -832,6 +828,8 @@ function showContactAlert(type, msg) {
   el.textContent = msg;
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
 </script>
 
 </body>
