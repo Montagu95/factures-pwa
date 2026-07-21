@@ -381,6 +381,27 @@
     .contact-card .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
     .contact-card .value { font-size: 0.88rem; font-weight: 600; color: var(--mauve); }
 
+    /* ── Contact layout ── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px; align-items: start;
+    }
+    @media (max-width: 720px) { .contact-layout { grid-template-columns: 1fr; } }
+    .contact-infos { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+    .contact-form-card {
+      background: white; border-radius: 20px;
+      padding: 36px; border: 1.5px solid var(--border);
+      box-shadow: 0 8px 32px rgba(201,116,143,.08);
+    }
+    .contact-form-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--mauve); margin-bottom: 6px;
+    }
+    .contact-form-card .desc {
+      font-size: .85rem; color: var(--muted); margin-bottom: 22px;
+    }
+
     /* ── Footer ── */
     footer {
       background: var(--mauve); color: rgba(255,255,255,.65);
@@ -635,30 +656,64 @@
 <!-- Contact -->
 <section id="contact" class="contact">
   <div class="section-inner">
-    <p class="section-tag">Me contacter</p>
-    <h2 class="section-title">Prendre rendez-vous</h2>
-    <div class="divider"></div>
-    <p style="color:var(--muted);font-size:.93rem;margin-bottom:24px">Les consultations ont lieu sur rendez-vous uniquement. N'hésitez pas à me contacter par email pour toute demande d'information ou de prise en charge.</p>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <div class="icon">📧</div>
-        <div class="label">Email</div>
-        <div class="value">cabinet@ouvertures-psy.online</div>
+    <div class="contact-layout">
+      <div class="contact-info">
+        <p class="section-tag">Me contacter</p>
+        <h2 class="section-title">Prendre rendez-vous</h2>
+        <div class="divider"></div>
+        <p style="color:var(--muted);font-size:.93rem;margin-bottom:24px">Les consultations ont lieu sur rendez-vous uniquement. N'hésitez pas à m'écrire pour toute demande d'information ou de prise en charge.</p>
+        <div class="contact-infos">
+          <div class="contact-card">
+            <div class="icon">📍</div>
+            <div class="label">Cabinet</div>
+            <div class="value">55 Rue du Général Leclerc<br/>95410 Groslay</div>
+          </div>
+          <div class="contact-card">
+            <div class="icon">🕐</div>
+            <div class="label">Modalités</div>
+            <div class="value">Sur rendez-vous uniquement</div>
+          </div>
+          <div class="contact-card">
+            <div class="icon">🔒</div>
+            <div class="label">Confidentialité</div>
+            <div class="value">Secret professionnel garanti</div>
+          </div>
+        </div>
       </div>
-      <div class="contact-card">
-        <div class="icon">📍</div>
-        <div class="label">Cabinet</div>
-        <div class="value">55 Rue du Général Leclerc<br/>95410 Groslay</div>
-      </div>
-      <div class="contact-card">
-        <div class="icon">🕐</div>
-        <div class="label">Modalités</div>
-        <div class="value">Sur rendez-vous uniquement</div>
-      </div>
-      <div class="contact-card">
-        <div class="icon">🔒</div>
-        <div class="label">Confidentialité</div>
-        <div class="value">Secret professionnel garanti</div>
+
+      <div class="contact-form-card">
+        <h3>Envoyer un message</h3>
+        <p class="desc">Je vous répondrai dans les meilleurs délais.</p>
+        <div class="field-row">
+          <div class="field">
+            <label>Prénom</label>
+            <input type="text" id="contactPrenom" placeholder="Marie" />
+          </div>
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" id="contactNom" placeholder="Dupont" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Votre email</label>
+          <input type="email" id="contactEmail" placeholder="marie.dupont@email.fr" />
+        </div>
+        <div class="field">
+          <label>Sujet</label>
+          <input type="text" id="contactSujet" placeholder="Demande de rendez-vous" />
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea id="contactMessage" rows="4" placeholder="Votre message…"
+            style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.9rem;font-family:'Nunito',sans-serif;color:var(--text);background:var(--cream);resize:vertical;transition:border-color .2s,box-shadow .2s;"
+            onfocus="this.style.outline='none';this.style.borderColor='var(--rose)';this.style.boxShadow='0 0 0 3px rgba(201,116,143,.12)';this.style.background='white'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"></textarea>
+        </div>
+        <button class="btn-submit" id="btnContact" onclick="envoyerContact()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Envoyer le message
+        </button>
+        <div class="alert" id="alertContact"></div>
       </div>
     </div>
   </div>
@@ -730,6 +785,53 @@ function showAlert(type, msg) {
 }
 
 document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
+
+async function envoyerContact() {
+  const prenom  = document.getElementById('contactPrenom').value.trim();
+  const nom     = document.getElementById('contactNom').value.trim();
+  const email   = document.getElementById('contactEmail').value.trim();
+  const sujet   = document.getElementById('contactSujet').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+  const btn     = document.getElementById('btnContact');
+  const alert   = document.getElementById('alertContact');
+
+  alert.className = 'alert';
+  alert.textContent = '';
+
+  if (!prenom || !nom)   return showContactAlert('error', 'Veuillez indiquer votre prénom et votre nom.');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showContactAlert('error', 'Adresse email invalide.');
+  if (!sujet)            return showContactAlert('error', 'Veuillez indiquer un sujet.');
+  if (!message)          return showContactAlert('error', 'Veuillez écrire votre message.');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Envoi en cours…';
+
+  try {
+    const res  = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prenom, nom, email, sujet, message })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+    showContactAlert('success', '✓ Votre message a bien été envoyé. Je vous répondrai dans les meilleurs délais.');
+    ['contactPrenom','contactNom','contactEmail','contactSujet','contactMessage'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  } catch (e) {
+    showContactAlert('error', 'Erreur d'envoi. Veuillez réessayer.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Envoyer le message';
+  }
+}
+
+function showContactAlert(type, msg) {
+  const el = document.getElementById('alertContact');
+  el.className = 'alert ' + type;
+  el.textContent = msg;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 </script>
 
 </body>
