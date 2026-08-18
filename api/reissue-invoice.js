@@ -283,7 +283,10 @@ module.exports = async function handler(req, res) {
       console.log('[reissue] Patient non trouvé:', patientName);
     } else {
       // Email admin : bypass de la vérification (test et vraies demandes)
-      const ADMIN_EMAILS = ['cabinet@meignant.net'];
+      const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean);
       const emailSaisi   = email.toLowerCase().trim();
       const isAdmin      = ADMIN_EMAILS.includes(emailSaisi);
 
