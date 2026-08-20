@@ -693,10 +693,16 @@
           <input type="checkbox" id="humanFacture" />
           <span>Je confirme être un humain et ne pas utiliser un robot</span>
         </label>
+        <!-- Checkbox consentement RGPD -->
+        <label class="human-check">
+          <input type="checkbox" id="consentFacture" />
+          <span>J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a></span>
+        </label>
         <button class="btn-submit" id="btnSubmit" onclick="demanderFacture()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
           Recevoir ma facture par email
         </button>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Les données collectées sont utilisées uniquement pour répondre à votre demande. Plus d'infos dans notre <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a>.</p>
         <div class="alert" id="alertBox"></div>
       </div>
     </div>
@@ -773,10 +779,16 @@
           <input type="checkbox" id="humanContact" />
           <span>Je confirme être un humain et ne pas utiliser un robot</span>
         </label>
+        <!-- Checkbox consentement RGPD -->
+        <label class="human-check">
+          <input type="checkbox" id="consentContact" />
+          <span>J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a></span>
+        </label>
         <button class="btn-submit" id="btnContact" onclick="envoyerContact()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Envoyer le message
         </button>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Les données collectées sont utilisées uniquement pour répondre à votre demande. Plus d'infos dans notre <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a>.</p>
         <div class="alert" id="alertContact"></div>
       </div>
     </div>
@@ -788,8 +800,8 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.6.3</span>
-  <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a></span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.8.0</span>
+  <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a></span>
 </footer>
 
 <script>
@@ -803,6 +815,14 @@ function checkHuman(hpId, checkId, alertFn) {
   // Checkbox : doit être cochée
   if (!document.getElementById(checkId).checked) {
     alertFn('error', 'Veuillez confirmer que vous etes un humain.');
+    return false;
+  }
+  return true;
+}
+
+function checkConsent(consentId, alertFn) {
+  if (!document.getElementById(consentId).checked) {
+    alertFn('error', 'Veuillez accepter l\'utilisation de vos donnees pour continuer.');
     return false;
   }
   return true;
@@ -826,6 +846,7 @@ async function demanderFacture() {
   if (!dateConsultation) return showAlert('error', 'Veuillez indiquer la date de votre consultation.');
   if (!montant || parseFloat(montant) <= 0) return showAlert('error', 'Veuillez indiquer le montant de la consultation.');
   if (!checkHuman('hpFacture', 'humanFacture', showAlert)) return;
+  if (!checkConsent('consentFacture', showAlert)) return;
 
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Recherche en cours...';
@@ -847,6 +868,7 @@ async function demanderFacture() {
         document.getElementById(id).value = '';
       });
       document.getElementById('humanFacture').checked = false;
+      document.getElementById('consentFacture').checked = false;
     } else {
       showAlert('info', '\u2139\ufe0f ' + data.message);
     }
@@ -883,6 +905,7 @@ async function envoyerContact() {
   if (!sujet)            return showContactAlert('error', 'Veuillez indiquer un sujet.');
   if (!message)          return showContactAlert('error', 'Veuillez ecrire votre message.');
   if (!checkHuman('hpContact', 'humanContact', showContactAlert)) return;
+  if (!checkConsent('consentContact', showContactAlert)) return;
 
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Envoi en cours...';
@@ -904,6 +927,7 @@ async function envoyerContact() {
       document.getElementById(id).value = '';
     });
     document.getElementById('humanContact').checked = false;
+    document.getElementById('consentContact').checked = false;
   } catch (e) {
     showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
