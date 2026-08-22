@@ -879,7 +879,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.9.3</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.9.4</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a></span>
 </footer>
 
@@ -1081,32 +1081,6 @@ function showPayerAlert(type, msg) {
 }
 
 document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
-
-// ── Retour depuis SogeCommerce après paiement ──────────────────────────────────
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const issue  = params.get('paiement');
-  if (issue) {
-    const el = document.getElementById('alertPayer');
-    if (el) {
-      const messages = {
-        succes: { type: 'success', text: '\u2713 Merci, votre paiement a bien été pris en compte. Votre facture vous sera envoyée par email dès sa génération.' },
-        echec:  { type: 'error',   text: '\u2717 Le paiement a été refusé. Aucun montant n\u2019a été débité. Vous pouvez réessayer ou contacter le praticien.' },
-        annule: { type: 'info',    text: '\u2139\ufe0f Le paiement a été annulé. Vous pouvez réessayer quand vous le souhaitez.' },
-        info:   { type: 'info',    text: '\u2139\ufe0f Vous êtes revenu depuis la page de paiement. Si vous avez bien payé, votre facture vous sera envoyée par email prochainement.' }
-      };
-      const m = messages[issue] || messages.info;
-      el.className = 'alert ' + m.type;
-      el.textContent = m.text;
-      setTimeout(function() {
-        document.getElementById('payer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300);
-    }
-    // Nettoie l'URL pour éviter de réafficher le message si la page est rechargée/partagée
-    const cleanUrl = window.location.pathname + window.location.hash;
-    window.history.replaceState({}, document.title, cleanUrl);
-  }
-})();
 
 // ── Menu mobile (hamburger) ────────────────────────────────────────────────────
 function toggleNavMenu() {

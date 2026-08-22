@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paiement — Yolène Meignant, Psychologue clinicienne</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose:    #c9748f;
+      --rose-bg: #fdf0f4;
+      --mauve:   #8e6b8e;
+      --cream:   #faf7f5;
+      --text:    #3d2b2b;
+      --muted:   #8a7070;
+      --border:  #e8d8d8;
+      --white:   #ffffff;
+      --green:   #16a34a;
+      --green-bg:#f0fdf4;
+      --red:     #dc2626;
+      --red-bg:  #fff5f5;
+      --amber:   #92400e;
+      --amber-bg:#fffbeb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif; color: var(--text); background: var(--cream);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 460px; width: 100%; background: var(--white);
+      border-radius: 20px; padding: 40px 32px; text-align: center;
+      box-shadow: 0 8px 32px rgba(142,107,142,.12);
+    }
+    .icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 2rem;
+    }
+    .icon.succes { background: var(--green-bg); color: var(--green); }
+    .icon.echec  { background: var(--red-bg); color: var(--red); }
+    .icon.annule { background: var(--amber-bg); color: var(--amber); }
+    .icon.info   { background: var(--rose-bg); color: var(--mauve); }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--mauve); margin-bottom: 16px;
+    }
+    p { color: var(--text); font-size: 0.95rem; line-height: 1.7; margin-bottom: 12px; }
+    .redirect-note { font-size: 0.82rem; color: var(--muted); margin-top: 24px; }
+    a.btn {
+      display: inline-block; margin-top: 8px;
+      background: var(--rose); color: white; text-decoration: none;
+      padding: 10px 22px; border-radius: 24px; font-size: 0.9rem; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="icon" id="icon"></div>
+    <h1 id="titre"></h1>
+    <div id="message"></div>
+    <p class="redirect-note">Retour automatique à l'accueil dans <span id="compteur">6</span> secondes…</p>
+    <a href="/" class="btn">Retour à l'accueil maintenant</a>
+  </div>
+
+<script>
+  const CONTENUS = {
+    succes: {
+      icone: '✓', classe: 'succes',
+      titre: 'Paiement confirmé',
+      message: [
+        "Merci, votre paiement a bien été pris en compte.",
+        "Votre consultation aura lieu à l'heure prévue. Un lien de visioconférence vous sera envoyé prochainement.",
+        "Vous recevrez également votre facture par email dès sa génération."
+      ]
+    },
+    echec: {
+      icone: '✕', classe: 'echec',
+      titre: 'Paiement refusé',
+      message: [
+        "Le paiement n'a pas pu être finalisé et aucun montant n'a été débité.",
+        "Vous pouvez réessayer depuis le site, ou contacter directement le praticien si le problème persiste."
+      ]
+    },
+    annule: {
+      icone: '!', classe: 'annule',
+      titre: 'Paiement annulé',
+      message: [
+        "Vous avez annulé le paiement avant sa finalisation.",
+        "Vous pouvez réessayer quand vous le souhaitez depuis le site."
+      ]
+    },
+    info: {
+      icone: 'i', classe: 'info',
+      titre: 'Retour du paiement',
+      message: [
+        "Vous êtes revenu depuis la page de paiement.",
+        "Si vous avez bien réglé votre consultation, votre facture vous sera envoyée par email prochainement."
+      ]
+    }
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const statut = CONTENUS[params.get('statut')] ? params.get('statut') : 'info';
+  const c = CONTENUS[statut];
+
+  document.getElementById('icon').className = 'icon ' + c.classe;
+  document.getElementById('icon').textContent = c.icone;
+  document.getElementById('titre').textContent = c.titre;
+  document.getElementById('message').innerHTML = c.message.map(function(p) { return '<p>' + p + '</p>'; }).join('');
+
+  let secondes = 6;
+  const compteurEl = document.getElementById('compteur');
+  const interval = setInterval(function() {
+    secondes -= 1;
+    if (secondes <= 0) {
+      clearInterval(interval);
+      window.location.href = '/';
+    } else {
+      compteurEl.textContent = secondes;
+    }
+  }, 1000);
+</script>
+
+</body>
+</html>
