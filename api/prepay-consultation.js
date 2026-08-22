@@ -260,9 +260,14 @@ module.exports = async function handler(req, res) {
       strongAuthentication: PREFERENCE_3DS,
       captureDelay: DELAI_REMISE_BANQUE_JOURS,
       dataCollectionForm: 'false',
-      // Redirection du patient vers le site après paiement (succès ou échec)
-      returnUrl:  'https://www.meignant.net/?paiement=merci#payer',
-      successUrl: 'https://www.meignant.net/?paiement=merci#payer'
+      // Redirection du patient vers le site après paiement, selon l'issue
+      // (nécessite un clic sur "Retourner à la boutique" côté page SogeCommerce —
+      // ces URL servent uniquement de contexte visuel, jamais de confirmation fiable :
+      // c'est le cron/QStash de mise à jour de statut qui fait foi)
+      returnUrl:  'https://www.meignant.net/?paiement=info#payer',
+      successUrl: 'https://www.meignant.net/?paiement=succes#payer',
+      refusedUrl: 'https://www.meignant.net/?paiement=echec#payer',
+      cancelUrl:  'https://www.meignant.net/?paiement=annule#payer'
     };
 
     const sogeRes = await fetch(`${apiUrl}/api-payment/V4/Charge/CreatePaymentOrder`, {
