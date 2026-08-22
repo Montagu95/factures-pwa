@@ -474,6 +474,7 @@
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
       <a href="#facture">Facture</a>
+      <a href="#payer">Payer en ligne</a>
       <a href="#contact">Contact</a>
       <a href="/mentions-legales.html">Mentions légales</a>
     </div>
@@ -709,6 +710,84 @@
   </div>
 </section>
 
+<!-- Prépaiement consultation -->
+<section id="payer" class="facture-section" style="background:var(--rose-bg)">
+  <div class="section-inner">
+    <p class="section-tag">Espace patient</p>
+    <h2 class="section-title">Payer ma consultation en ligne</h2>
+    <div class="divider"></div>
+    <div class="facture-layout">
+      <div class="facture-info">
+        <h3>Comment ça fonctionne ?</h3>
+        <p>Réglez votre consultation à venir directement en ligne, en toute sécurité, pour éviter tout oubli de règlement. Votre facture vous sera automatiquement envoyée par email une fois le paiement confirmé.</p>
+        <div class="facture-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Renseignez vos informations</strong> et le montant convenu avec le praticien.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Vous êtes redirigé</strong> vers la page de paiement sécurisée SogeCommerce.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Votre facture</strong> vous est envoyée automatiquement par email après confirmation du paiement.</div>
+          </div>
+        </div>
+        <div style="margin-top:24px;padding:16px;background:var(--white);border-radius:12px;font-size:.85rem;color:var(--muted)">
+          💡 Le montant à régler vous a été communiqué directement par le praticien.
+        </div>
+      </div>
+
+      <div class="facture-card">
+        <h3>Paiement en ligne</h3>
+        <p class="desc">Réservé aux patients déjà suivis. Indiquez votre prénom et nom tels qu'enregistrés lors de votre suivi.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Prénom</label>
+            <input type="text" id="prenomPayer" placeholder="Marie" autocomplete="given-name" />
+          </div>
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" id="nomPayer" placeholder="Dupont" autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="emailPayer" placeholder="marie.dupont@email.fr" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label>Montant à régler (€)</label>
+          <input type="number" id="montantPayer" placeholder="60.00" min="0.50" step="0.01" inputmode="decimal" />
+        </div>
+
+        <!-- Honeypot invisible — rempli uniquement par les bots -->
+        <div class="honeypot" aria-hidden="true">
+          <label>Ne pas remplir ce champ</label>
+          <input type="text" id="hpPayer" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Checkbox humain -->
+        <label class="human-check">
+          <input type="checkbox" id="humanPayer" />
+          <span>Je confirme être un humain et ne pas utiliser un robot</span>
+        </label>
+        <!-- Checkbox consentement RGPD -->
+        <label class="human-check">
+          <input type="checkbox" id="consentPayer" />
+          <span>J'accepte que mes données soient utilisées pour traiter ma demande, conformément à la <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a></span>
+        </label>
+        <button class="btn-submit" id="btnPayer" onclick="payerConsultation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Procéder au paiement
+        </button>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:10px;text-align:center">Les données collectées sont utilisées uniquement pour répondre à votre demande. Plus d'infos dans notre <a href="/politique-de-confidentialite.html" style="color:var(--rose)">politique de confidentialité</a>.</p>
+        <div class="alert" id="alertPayer"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact -->
 <section id="contact" class="contact">
   <div class="section-inner">
@@ -800,7 +879,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.8.0</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.9.1</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a></span>
 </footer>
 
@@ -943,7 +1022,83 @@ function showContactAlert(type, msg) {
   el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// ── Formulaire paiement en ligne ────────────────────────────────────────────
+async function payerConsultation() {
+  const prenom  = document.getElementById('prenomPayer').value.trim();
+  const nom     = document.getElementById('nomPayer').value.trim();
+  const email   = document.getElementById('emailPayer').value.trim();
+  const montant = document.getElementById('montantPayer').value.trim();
+  const btn     = document.getElementById('btnPayer');
+  const alrt    = document.getElementById('alertPayer');
+
+  alrt.className = 'alert';
+  alrt.textContent = '';
+
+  if (!prenom || !nom)   return showPayerAlert('error', 'Veuillez indiquer votre prenom et votre nom.');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showPayerAlert('error', 'Adresse email invalide.');
+  if (!montant || parseFloat(montant) <= 0) return showPayerAlert('error', 'Veuillez indiquer le montant a regler.');
+  if (!checkHuman('hpPayer', 'humanPayer', showPayerAlert)) return;
+  if (!checkConsent('consentPayer', showPayerAlert)) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Creation du lien de paiement...';
+
+  try {
+    const res  = await fetch('/api/prepay-consultation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prenom, nom, email, montant })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showPayerAlert('error', data.error || 'Une erreur est survenue. Veuillez reessayer.');
+      return;
+    }
+    if (data.success && data.paymentURL) {
+      showPayerAlert('success', '\u2713 Redirection vers la page de paiement securisee...');
+      setTimeout(function() { window.location.href = data.paymentURL; }, 900);
+    } else {
+      showPayerAlert('info', '\u2139\ufe0f ' + data.message);
+      ['prenomPayer','nomPayer','emailPayer','montantPayer'].forEach(function(id) {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('humanPayer').checked = false;
+      document.getElementById('consentPayer').checked = false;
+    }
+  } catch (e) {
+    showPayerAlert('error', 'Erreur de connexion. Veuillez reessayer dans quelques instants.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Proceder au paiement';
+  }
+}
+
+function showPayerAlert(type, msg) {
+  const el = document.getElementById('alertPayer');
+  el.className = 'alert ' + type;
+  el.textContent = msg;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 document.getElementById('dateConsultation').max = new Date().toISOString().slice(0, 10);
+
+// ── Retour depuis SogeCommerce après paiement ──────────────────────────────────
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paiement') === 'merci') {
+    const el = document.getElementById('alertPayer');
+    if (el) {
+      el.className = 'alert success';
+      el.textContent = '\u2713 Merci, votre paiement a bien été pris en compte. Votre facture vous sera envoyée par email dès sa génération.';
+      setTimeout(function() {
+        document.getElementById('payer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+    // Nettoie l'URL pour éviter de réafficher le message si la page est rechargée/partagée
+    const cleanUrl = window.location.pathname + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
+})();
 
 // ── Menu mobile (hamburger) ────────────────────────────────────────────────────
 function toggleNavMenu() {
