@@ -362,13 +362,21 @@ module.exports = async function handler(req, res) {
         settings = rawSettings ? (isEncryptedValue(rawSettings) ? decrypt(rawSettings) : rawSettings) : {};
       } catch (e) {}
 
+      // La signature/logo est stockée séparément (invoice:signature, non chiffrée,
+      // car trop volumineuse pour vivre dans invoice:settings) — même pattern que
+      // poll-payments.js dans invoice-pwa
+      let signatureB64 = null;
+      try {
+        signatureB64 = await redisGet('invoice:signature');
+      } catch (e) {}
+
       // Enrichir la facture avec le praticien si absent
       if (!facture.praticien && settings.praticien) {
         facture = { ...facture, praticien: settings.praticien };
       }
 
       // Générer le PDF
-      const pdfBase64 = await generateInvoicePDF(facture, settings, settings.signatureB64 || null);
+      const pdfBase64 = await generateInvoicePDF(facture, settings, signatureB64);
 
       // Envoyer email au patient
       await sendInvoiceEmail(email, patientName, facture, pdfBase64, settings);
