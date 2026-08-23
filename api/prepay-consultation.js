@@ -63,10 +63,11 @@ function normalize(s) {
 
 // ─── Transport email ─────────────────────────────────────────────────────────
 function createTransport() {
+  const port = parseInt(process.env.SMTP_PORT) || 465;
   return nodemailer.createTransport({
     host:   process.env.SMTP_HOST,
-    port:   parseInt(process.env.SMTP_PORT) || 465,
-    secure: true,
+    port:   port,
+    secure: port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
     auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
     tls:    { rejectUnauthorized: false }
   });
