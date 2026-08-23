@@ -22,7 +22,10 @@ const { generateInvoicePDF } = require('../lib/pdf-server');
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const PRATICIEN_EMAIL  = process.env.PRATICIEN_EMAIL  || 'cabinet@ouvertures-psy.online';
-const INVOICE_PREFIX   = process.env.INVOICE_PREFIX   || 'PROD';
+// Base de factures interrogée (PROD ou TEST), pilotée par SOGE_MODE pour n'avoir
+// qu'un seul interrupteur d'environnement (comme pour les paiements SogeCommerce) :
+// SOGE_MODE=PRODUCTION → factures PROD, tout le reste (TEST, non défini) → factures TEST.
+const INVOICE_PREFIX   = (process.env.SOGE_MODE || 'TEST').toUpperCase() === 'PRODUCTION' ? 'PROD' : 'TEST';
 const REDIS_URL        = process.env.UPSTASH_REDIS_REST_URL;
 const REDIS_TOKEN      = process.env.UPSTASH_REDIS_REST_TOKEN;
 
