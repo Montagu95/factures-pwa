@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Articles — Yolène Meignant, Psychologue clinicienne</title>
+  <meta name="description" content="Articles et ressources sur la psychothérapie, l'anxiété, le deuil, le couple et l'accompagnement psychologique, par Yolène Meignant, psychologue clinicienne." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose:    #c9748f;
+      --rose-l:  #e8b4c2;
+      --rose-bg: #fdf0f4;
+      --mauve:   #8e6b8e;
+      --mauve-l: #c4a8c4;
+      --sage:    #8aab8a;
+      --cream:   #faf7f5;
+      --warm:    #f5efe8;
+      --text:    #3d2b2b;
+      --muted:   #8a7070;
+      --border:  #e8d8d8;
+      --white:   #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; color: var(--text); background: var(--cream); line-height: 1.7; }
+
+    /* ── Navigation (identique au site principal) ── */
+    nav {
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 12px rgba(201,116,143,.08);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+    .nav-brand-text { line-height: 1.2; }
+    .nav-brand-name { font-family: 'Playfair Display', serif; font-size: 0.98rem; font-weight: 600; color: var(--mauve); }
+    .nav-brand-sub { font-size: 0.72rem; color: var(--muted); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--rose); }
+    .nav-links a.active { color: var(--rose); }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+    }
+
+    /* ── En-tête de page ── */
+    .page-header { padding: 64px 24px 40px; text-align: center; }
+    .section-tag {
+      font-size: 0.72rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--rose);
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--mauve); margin-bottom: 14px; line-height: 1.3;
+    }
+    .page-header p { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 0.98rem; }
+    .divider { width: 48px; height: 3px; background: linear-gradient(90deg, var(--rose), var(--rose-l)); border-radius: 2px; margin: 16px auto 0; }
+
+    /* ── Grille d'articles ── */
+    .articles-wrap { max-width: 1100px; margin: 0 auto; padding: 20px 24px 90px; }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .article-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(142,107,142,.08);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .article-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(142,107,142,.14); }
+    .article-icon { font-size: 2rem; margin-bottom: 14px; }
+    .article-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; color: var(--mauve);
+      margin-bottom: 10px; line-height: 1.35;
+    }
+    .article-card p { font-size: 0.88rem; color: var(--muted); flex-grow: 1; margin-bottom: 16px; }
+    .article-read {
+      font-size: 0.82rem; font-weight: 600; color: var(--rose);
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    footer {
+      background: var(--mauve); color: rgba(255,255,255,.85);
+      text-align: center; padding: 40px 24px; font-size: 0.85rem;
+    }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/images/logo.jpg" alt="Logo Ouvertures Psy" class="nav-logo" />
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">Yolène Meignant</div>
+        <div class="nav-brand-sub">Psychologue clinicienne · Consultations en visioconférence</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="/#apropos">À propos</a>
+      <a href="/#publics">Consultations</a>
+      <a href="/articles.html" class="active">Articles</a>
+      <a href="/#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <p class="section-tag">Ressources</p>
+  <h1>Articles &amp; réflexions</h1>
+  <div class="divider"></div>
+  <p>Des repères pour mieux comprendre certains sujets abordés en consultation — anxiété, deuil, couple, burn-out — sans jamais remplacer un accompagnement individualisé.</p>
+</div>
+
+<div class="articles-wrap">
+  <div class="articles-grid">
+
+    <a href="/articles/premiere-seance-therapie-analytique.html" class="article-card">
+      <div class="article-icon">🛋️</div>
+      <h2>Première séance en thérapie analytique : à quoi s'attendre ?</h2>
+      <p>Peur de « ne pas savoir quoi dire », appréhension du jugement : voici, concrètement, ce qui se passe lors d'un premier rendez-vous.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/visioconference-therapie.html" class="article-card">
+      <div class="article-icon">💻</div>
+      <h2>Consultation en visioconférence : est-ce aussi efficace qu'en cabinet ?</h2>
+      <p>La thérapie à distance a longtemps semblé un pis-aller. Elle est aujourd'hui un cadre à part entière, avec ses propres atouts.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/reconnaitre-burn-out.html" class="article-card">
+      <div class="article-icon">🪫</div>
+      <h2>Reconnaître les signes d'un épuisement professionnel</h2>
+      <p>Fatigue qui ne passe pas avec le repos, perte de sens au travail : le burn-out s'installe souvent bien avant qu'on ose se l'avouer.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/therapie-de-couple.html" class="article-card">
+      <div class="article-icon">💞</div>
+      <h2>Thérapie de couple : quand et pourquoi consulter ?</h2>
+      <p>Consulter à deux n'est pas réservé aux couples « en crise ». C'est aussi un espace pour retrouver un dialogue qui s'est essoufflé.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/comprendre-le-deuil.html" class="article-card">
+      <div class="article-icon">🕊️</div>
+      <h2>Le deuil n'a pas de calendrier : comprendre le temps du deuil</h2>
+      <p>Il n'existe pas de durée normale pour faire son deuil. Comprendre ce cheminement aide à ne pas se juger dans une épreuve déjà difficile.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/anxiete-envahissante.html" class="article-card">
+      <div class="article-icon">🌊</div>
+      <h2>Anxiété : quand la vigilance normale devient envahissante</h2>
+      <p>L'anxiété est d'abord une émotion utile. Le problème commence quand elle envahit le quotidien sans rapport avec un danger réel.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+    <a href="/articles/ethnopsychanalyse.html" class="article-card">
+      <div class="article-icon">🌍</div>
+      <h2>Qu'est-ce que l'ethnopsychanalyse ?</h2>
+      <p>Une approche qui ajoute à l'écoute clinique classique une attention à la dimension culturelle du psychisme.</p>
+      <span class="article-read">Lire l'article →</span>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <strong>Ouvertures Psy — Yolène Meignant</strong><br/>
+  <span style="margin-top:4px;display:block;font-size:.8rem;"><a href="/">Retour à l'accueil</a> · <a href="/mentions-legales.html">Mentions légales</a></span>
+</footer>
+
+</body>
+</html>

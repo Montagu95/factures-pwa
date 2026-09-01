@@ -75,9 +75,12 @@ module.exports = async function handler(req, res) {
   if (!rl.ok) return res.status(429).json({ error: rl.message });
 
   // Vérification patient : réservé aux patients déjà suivis
+  const startTime = Date.now(); // Pour le timing constant (évite de révéler par le délai si le patient existe)
   const estPatient = await patientExiste(prenom, nom);
   if (!estPatient) {
     console.log('[contact] Patient non identifie:', prenom, nom);
+    const elapsed = Date.now() - startTime;
+    if (elapsed < 1500) await new Promise(r => setTimeout(r, 1500 - elapsed));
     return res.status(403).json({
       error: 'Ce formulaire est reserve aux patients deja suivis au cabinet. Pour une premiere prise de contact, merci de nous appeler directement.'
     });

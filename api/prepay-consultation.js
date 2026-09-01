@@ -183,6 +183,7 @@ module.exports = async function handler(req, res) {
   }
 
   const patientName = `${prenom} ${nom}`;
+  const startTime   = Date.now(); // Pour le timing constant (évite de révéler par le délai si le patient/email correspond)
 
   try {
     // ── 1. Vérifier que le patient est déjà connu ──────────────────────
@@ -223,6 +224,8 @@ module.exports = async function handler(req, res) {
       } catch (mailErr) {
         console.error('[prepay] Erreur envoi email (patient non trouvé):', mailErr.message);
       }
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 1500) await new Promise(r => setTimeout(r, 1500 - elapsed));
       return res.status(200).json({
         success: false,
         message: "Nous n'avons pas pu retrouver automatiquement votre dossier. Le praticien va vous contacter."
