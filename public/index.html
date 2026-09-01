@@ -57,13 +57,55 @@
       color: var(--mauve);
     }
     .nav-brand-sub { font-size: 0.72rem; color: var(--muted); }
-    .nav-links { display: flex; gap: 24px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a {
       font-size: 0.85rem; color: var(--muted);
       text-decoration: none; transition: color .2s;
       font-weight: 500;
     }
     .nav-links a:hover { color: var(--rose); }
+
+    .nav-cta {
+      background: var(--rose);
+      color: white !important;
+      padding: 9px 20px;
+      border-radius: 30px;
+      font-weight: 600 !important;
+      transition: background .2s, transform .2s;
+    }
+    .nav-cta:hover { background: var(--mauve); color: white !important; transform: translateY(-1px); }
+
+    .nav-dropdown { position: relative; }
+    .nav-dropdown summary {
+      font-size: 0.85rem; color: var(--muted); font-weight: 500;
+      cursor: pointer; list-style: none;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .nav-dropdown summary::-webkit-details-marker { display: none; }
+    .nav-dropdown summary::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform .2s;
+    }
+    .nav-dropdown[open] summary::after { transform: rotate(-135deg) translateY(2px); }
+    .nav-dropdown:hover summary,
+    .nav-dropdown[open] summary { color: var(--rose); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 14px); right: 0;
+      background: white; border: 1px solid var(--border);
+      border-radius: 14px; padding: 8px;
+      box-shadow: 0 12px 30px rgba(142,107,142,.14);
+      display: flex; flex-direction: column; gap: 2px;
+      min-width: 170px;
+      z-index: 20;
+    }
+    .nav-dropdown-menu a {
+      padding: 9px 12px; border-radius: 8px; white-space: nowrap;
+    }
+    .nav-dropdown-menu a:hover { background: var(--rose-bg); }
 
     .nav-burger {
       display: none;
@@ -84,7 +126,7 @@
 
     @media (max-width: 860px) {
       .nav-links {
-        display: flex; flex-direction: column;
+        display: flex; flex-direction: column; align-items: stretch;
         position: absolute; top: 68px; left: 0; right: 0;
         background: var(--white, #fff);
         border-bottom: 1px solid var(--border);
@@ -102,6 +144,15 @@
       .nav-links a { padding: 10px 0; border-bottom: 1px solid var(--border); }
       .nav-links a:last-child { border-bottom: none; }
       .nav-burger { display: flex; }
+
+      .nav-dropdown { border-bottom: 1px solid var(--border); }
+      .nav-dropdown summary { padding: 10px 0; }
+      .nav-dropdown-menu {
+        position: static; box-shadow: none; border: none;
+        padding: 0 0 6px 12px; min-width: 0;
+      }
+      .nav-dropdown-menu a { padding: 8px 0; border-bottom: none; }
+      .nav-cta { display: inline-block; margin-top: 8px; text-align: center; border-bottom: none !important; }
     }
 
     /* ── Hero ── */
@@ -474,10 +525,14 @@
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
       <a href="/articles.html">Articles</a>
-      <a href="#facture">Facture</a>
-      <a href="#payer">Payer en ligne</a>
-      <a href="#contact">Contact</a>
-      <a href="/mentions-legales.html">Mentions légales</a>
+      <details class="nav-dropdown">
+        <summary>Espace patient</summary>
+        <div class="nav-dropdown-menu">
+          <a href="#facture">Ma facture</a>
+          <a href="#payer">Payer en ligne</a>
+        </div>
+      </details>
+      <a href="#contact" class="nav-cta">Contact</a>
     </div>
     <button class="nav-burger" id="navBurger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks" onclick="toggleNavMenu()">
       <span></span><span></span><span></span>
@@ -875,7 +930,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.0</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.2</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
