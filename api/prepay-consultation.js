@@ -20,6 +20,7 @@ try {
 const nodemailer         = require('nodemailer');
 const { checkRateLimit } = require('../lib/rate-limit');
 const { decrypt }        = require('../lib/crypto-utils');
+const { getSmtpConfig, getFromAddress } = require('../lib/smtp-config');
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const PRATICIEN_EMAIL = process.env.PRATICIEN_EMAIL || 'cabinet@ouvertures-psy.online';
@@ -62,21 +63,24 @@ function normalize(s) {
 }
 
 // ─── Transport email ─────────────────────────────────────────────────────────
-function createTransport() {
-  const port = parseInt(process.env.SMTP_PORT) || 465;
-  return nodemailer.createTransport({
-    host:   process.env.SMTP_HOST,
-    port:   port,
-    secure: port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
-    auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    tls:    { rejectUnauthorized: false }
-  });
+async function createTransport() {
+  const cfg = await getSmtpConfig();
+  return {
+    transporter: nodemailer.createTransport({
+      host:   cfg.host,
+      port:   cfg.port,
+      secure: cfg.port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
+      auth:   { user: cfg.user, pass: cfg.password },
+      tls:    { rejectUnauthorized: false }
+    }),
+    from: await getFromAddress(cfg.user)
+  };
 }
 
 async function sendAlertEmailPraticien(patientName, emailPatient, montantSaisi, raison) {
-  const transporter = createTransport();
+  const { transporter, from } = await createTransport();
   await transporter.sendMail({
-    from:    `"Site www.meignant.net" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from:    `"Site www.meignant.net" <${from}>`,
     to:      PRATICIEN_EMAIL,
     subject: `⚠️ Demande de prépaiement non traitée — ${patientName}`,
     text: [
@@ -108,9 +112,9 @@ async function sendAlertEmailPraticien(patientName, emailPatient, montantSaisi, 
 }
 
 async function sendNotFoundEmailPatient(to, patientName) {
-  const transporter = createTransport();
+  const { transporter, from } = await createTransport();
   await transporter.sendMail({
-    from:    `"Cabinet" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from:    `"Cabinet" <${from}>`,
     to,
     subject: `Demande de paiement en ligne — en cours de traitement`,
     text: [
@@ -154,7 +158,7 @@ module.exports = async function handler(req, res) {
   if (!REDIS_URL)  missingVars.push('UPSTASH_REDIS_REST_URL');
   if (!REDIS_TOKEN) missingVars.push('UPSTASH_REDIS_REST_TOKEN');
   if (!process.env.ENCRYPTION_KEY) missingVars.push('ENCRYPTION_KEY');
-  if (!process.env.SMTP_HOST)      missingVars.push('SMTP_HOST');
+  // SMTP_HOST n'est plus vérifié ici : peut désormais venir de Redis (invoice:smtp)
   if (!process.env.SOGE_USERNAME)  missingVars.push('SOGE_USERNAME');
   if (!process.env.SOGE_PASSWORD)  missingVars.push('SOGE_PASSWORD');
   if (missingVars.length > 0) {
