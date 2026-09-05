@@ -13,6 +13,7 @@ try {
 const nodemailer        = require('nodemailer');
 const { checkRateLimit } = require('../lib/rate-limit');
 const { decrypt }        = require('../lib/crypto-utils');
+const { getSmtpConfig, getFromAddress } = require('../lib/smtp-config');
 
 // ─── Vérification patient ────────────────────────────────────────────────────
 const REDIS_URL   = process.env.UPSTASH_REDIS_REST_URL;
@@ -43,17 +44,6 @@ async function patientExiste(prenom, nom) {
     normalize(p.prenom) === normalize(prenom) &&
     normalize(p.nom)    === normalize(nom)
   );
-}
-
-function createTransport() {
-  const port = parseInt(process.env.SMTP_PORT) || 465;
-  return nodemailer.createTransport({
-    host:   process.env.SMTP_HOST,
-    port:   port,
-    secure: port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
-    auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    tls:    { rejectUnauthorized: false }
-  });
 }
 
 module.exports = async function handler(req, res) {
@@ -103,10 +93,18 @@ module.exports = async function handler(req, res) {
   });
 
   try {
-    const transporter = createTransport();
+    const smtpCfg      = await getSmtpConfig();
+    const transporter  = nodemailer.createTransport({
+      host:   smtpCfg.host,
+      port:   smtpCfg.port,
+      secure: smtpCfg.port === 465,
+      auth:   { user: smtpCfg.user, pass: smtpCfg.password },
+      tls:    { rejectUnauthorized: false }
+    });
+    const fromAddress = await getFromAddress(smtpCfg.user);
 
     await transporter.sendMail({
-      from:     `"Site Ouvertures Psy" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      from:     `"Site Ouvertures Psy" <${fromAddress}>`,
       to:       praticienEmail,
       replyTo:  email,  // Répondre directement au visiteur
       subject:  `[Contact www.meignant.net] ${sujet}`,

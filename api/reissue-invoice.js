@@ -19,6 +19,7 @@ const nodemailer        = require('nodemailer');
 const { checkRateLimit } = require('../lib/rate-limit');
 const { decrypt }       = require('../lib/crypto-utils');
 const { generateInvoicePDF } = require('../lib/pdf-server');
+const { getSmtpConfig, getFromAddress } = require('../lib/smtp-config');
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const PRATICIEN_EMAIL  = process.env.PRATICIEN_EMAIL  || 'cabinet@ouvertures-psy.online';
@@ -100,24 +101,27 @@ function dateCorrespond(facture, dateSaisie) {
 }
 
 // ─── Transport email ─────────────────────────────────────────────────────────
-function createTransport() {
-  const port = parseInt(process.env.SMTP_PORT) || 465;
-  return nodemailer.createTransport({
-    host:   process.env.SMTP_HOST,
-    port:   port,
-    secure: port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
-    auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    tls:    { rejectUnauthorized: false }
-  });
+async function createTransport() {
+  const cfg = await getSmtpConfig();
+  return {
+    transporter: nodemailer.createTransport({
+      host:   cfg.host,
+      port:   cfg.port,
+      secure: cfg.port === 465,
+      auth:   { user: cfg.user, pass: cfg.password },
+      tls:    { rejectUnauthorized: false }
+    }),
+    from: await getFromAddress(cfg.user)
+  };
 }
 
 async function sendInvoiceEmail(to, patientName, invoice, pdfBase64, settings) {
   const praticien  = invoice.praticien || settings.praticien || {};
   const totalStr   = parseFloat(invoice.total || 0).toFixed(2).replace('.', ',') + ' €';
-  const transporter = createTransport();
+  const { transporter, from } = await createTransport();
 
   await transporter.sendMail({
-    from:    `"Cabinet" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from:    `"Cabinet" <${from}>`,
     to,
     bcc:     PRATICIEN_EMAIL,
     subject: `Votre facture ${invoice.invoiceNumber}`,
@@ -152,9 +156,9 @@ async function sendInvoiceEmail(to, patientName, invoice, pdfBase64, settings) {
 }
 
 async function sendNotFoundEmailPatient(to, patientName, dateSaisie, montantSaisi) {
-  const transporter = createTransport();
+  const { transporter, from } = await createTransport();
   await transporter.sendMail({
-    from:    `"Cabinet Ouvertures Psy" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from:    `"Cabinet Ouvertures Psy" <${from}>`,
     to,
     subject: `Demande de facture — en cours de traitement`,
     text: [
@@ -190,9 +194,9 @@ async function sendNotFoundEmailPatient(to, patientName, dateSaisie, montantSais
 }
 
 async function sendAlertEmailPraticien(patientName, emailPatient, dateSaisie, montantSaisi, raison) {
-  const transporter = createTransport();
+  const { transporter, from } = await createTransport();
   await transporter.sendMail({
-    from:    `"Site www.meignant.net" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    from:    `"Site www.meignant.net" <${from}>`,
     to:      PRATICIEN_EMAIL,
     subject: `⚠️ Demande de facture non trouvée — ${patientName}`,
     text: [
@@ -240,7 +244,7 @@ module.exports = async function handler(req, res) {
   if (!process.env.UPSTASH_REDIS_REST_URL)  missingVars.push('UPSTASH_REDIS_REST_URL');
   if (!process.env.UPSTASH_REDIS_REST_TOKEN) missingVars.push('UPSTASH_REDIS_REST_TOKEN');
   if (!process.env.ENCRYPTION_KEY)          missingVars.push('ENCRYPTION_KEY');
-  if (!process.env.SMTP_HOST)               missingVars.push('SMTP_HOST');
+  // SMTP_HOST n'est plus vérifié ici : peut désormais venir de Redis (invoice:smtp)
   if (missingVars.length > 0) {
     console.error('[reissue] Variables manquantes:', missingVars.join(', '));
     return res.status(500).json({ error: 'Configuration serveur incomplete: ' + missingVars.join(', ') });
