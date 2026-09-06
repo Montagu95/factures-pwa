@@ -166,7 +166,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Configuration serveur incomplete: ' + missingVars.join(', ') });
   }
 
-  const { prenom, nom, email, montant, website } = req.body || {};
+  const { prenom, nom, email, montant, dateConsultation, website } = req.body || {};
 
   // Honeypot : si rempli → bot silencieux
   if (website) { console.warn('[prepay] Honeypot bot detecte'); return res.status(200).json({ success: false, message: 'Demande enregistree.' }); }
@@ -176,7 +176,7 @@ module.exports = async function handler(req, res) {
   if (!rl.ok) return res.status(429).json({ error: rl.message });
 
   // Validation des champs
-  if (!prenom || !nom || !email || !montant) {
+  if (!prenom || !nom || !email || !montant || !dateConsultation) {
     return res.status(400).json({ error: 'Tous les champs sont requis' });
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -184,6 +184,9 @@ module.exports = async function handler(req, res) {
   }
   if (isNaN(parseFloat(montant)) || parseFloat(montant) <= 0) {
     return res.status(400).json({ error: 'Montant invalide' });
+  }
+  if (isNaN(new Date(dateConsultation).getTime())) {
+    return res.status(400).json({ error: 'Date de consultation invalide' });
   }
 
   const patientName = `${prenom} ${nom}`;
@@ -303,6 +306,9 @@ module.exports = async function handler(req, res) {
 
     const paymentOrderId = sogeData.answer.paymentOrderId;
     const creationDate   = new Date().toISOString();
+    // Date de consultation prévue, saisie par le patient — normalisée en ISO
+    // (midi UTC pour éviter tout décalage de jour selon le fuseau horaire)
+    const consultationDateISO = new Date(dateConsultation + 'T12:00:00.000Z').toISOString();
 
     // ── 3. Sauvegarde dans Redis (même structure que sogecommerce-pwa) ──
     // Les crons existants (mise à jour statut + création facture/email) traiteront
@@ -317,6 +323,7 @@ module.exports = async function handler(req, res) {
         'amount',         String(montantCentimes),
         'status',         'RUNNING',
         'creationDate',   creationDate,
+        'consultationDate', consultationDateISO,
         'expirationDate', expirationDate,
         'paymentURL',     sogeData.answer.paymentURL,
         'paiementGroupe', 'false',
