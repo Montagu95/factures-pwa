@@ -63,7 +63,7 @@
     <div class="icon" id="icon"></div>
     <h1 id="titre"></h1>
     <div id="message"></div>
-    <p class="redirect-note">Retour automatique à l'accueil dans <span id="compteur">6</span> secondes…</p>
+    <p class="redirect-note">Retour automatique à l'accueil dans <span id="compteur">15</span> secondes…</p>
     <a href="/" class="btn">Retour à l'accueil maintenant</a>
   </div>
 
@@ -74,8 +74,8 @@
       titre: 'Paiement confirmé',
       message: [
         "Merci, votre paiement a bien été pris en compte.",
-        "Votre consultation aura lieu à l'heure prévue. Un lien de visioconférence vous sera envoyé prochainement.",
-        "Vous recevrez également votre facture par email dès sa génération."
+        "Vous recevrez votre facture par email dès sa génération.",
+        "Pour toute question sur votre consultation, n'hésitez pas à contacter directement le cabinet."
       ]
     },
     echec: {
@@ -113,7 +113,7 @@
   document.getElementById('titre').textContent = c.titre;
   document.getElementById('message').innerHTML = c.message.map(function(p) { return '<p>' + p + '</p>'; }).join('');
 
-  let secondes = 6;
+  let secondes = 15;
   const compteurEl = document.getElementById('compteur');
   const interval = setInterval(function() {
     secondes -= 1;

@@ -73,11 +73,23 @@ function montantCorrespond(facture, montantSaisi) {
 }
 
 // ─── Vérification date (±3 jours de tolérance) ───────────────────────────────
-// La date de consultation est dans lines[0].description (format "DD/MM/YYYY" ou ISO)
-// invoiceDate est la date d'émission, pas de consultation
+// La date de consultation est dans lines[0].description. Deux formats possibles
+// selon l'app qui a créé la facture :
+//   - "DD/MM/YYYY" (factures créées/rééditées via facture-pwa)
+//   - "dimanche 23 août 2026" — format long généré par formatDateFr() dans
+//     invoice-pwa/api/poll-payments.js pour les factures auto-créées après un
+//     paiement SogeCommerce. new Date() ne sait PAS parser ce format (noms de
+//     jours/mois français non reconnus) — d'où le mapping explicite ci-dessous.
+// invoiceDate est la date d'émission (création de l'enregistrement), pas
+// forcément la date de consultation — d'où l'importance de bien lire la
+// description en priorité plutôt que de retomber sur invoiceDate.
+const MOIS_FR = {
+  janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3, mai: 4, juin: 5,
+  juillet: 6, août: 7, aout: 7, septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11
+};
 function parseDateDescription(desc) {
   if (!desc) return null;
-  // Format français DD/MM/YYYY
+  // Format français court DD/MM/YYYY
   const frMatch = desc.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
   if (frMatch) {
     return new Date(
@@ -86,15 +98,39 @@ function parseDateDescription(desc) {
       parseInt(frMatch[1])
     );
   }
+  // Format français long, ex: "dimanche 23 août 2026" (avec ou sans jour de semaine)
+  const longMatch = desc.toLowerCase().match(/(\d{1,2})\s+([a-zéû]+)\s+(\d{4})/i);
+  if (longMatch) {
+    const jour = parseInt(longMatch[1], 10);
+    const mois = MOIS_FR[longMatch[2]];
+    const annee = parseInt(longMatch[3], 10);
+    if (mois !== undefined) return new Date(annee, mois, jour);
+  }
   // Format ISO ou autre
   const d = new Date(desc);
   return isNaN(d) ? null : d;
 }
 
-function dateCorrespond(facture, dateSaisie) {
-  // Chercher la date dans lines[0].description en priorité
+// Résout la date réelle de consultation avec 3 niveaux de repli, du plus au
+// moins fiable :
+//   1. facture.consultationDate — champ ISO dédié (factures créées après ce
+//      correctif, voir invoice-pwa/api/poll-payments.js), le plus fiable.
+//   2. Parsing de lines[0].description — couvre toutes les factures
+//      existantes (formats DD/MM/YYYY ou français long).
+//   3. invoiceDate/createdAt — dernier recours, peut différer de la date de
+//      consultation si l'enregistrement a été créé après coup.
+function getConsultationDate(facture) {
+  if (facture.consultationDate) {
+    const d = new Date(facture.consultationDate);
+    if (!isNaN(d)) return d;
+  }
   const descDate = parseDateDescription((facture.lines || [])[0]?.description);
-  const fd = descDate || new Date(facture.invoiceDate || facture.createdAt);
+  if (descDate) return descDate;
+  return new Date(facture.invoiceDate || facture.createdAt);
+}
+
+function dateCorrespond(facture, dateSaisie) {
+  const fd = getConsultationDate(facture);
   const ds = new Date(dateSaisie);
   if (isNaN(fd) || isNaN(ds)) return false;
   return Math.abs(fd - ds) <= 3 * 24 * 60 * 60 * 1000;
@@ -107,7 +143,7 @@ async function createTransport() {
     transporter: nodemailer.createTransport({
       host:   cfg.host,
       port:   cfg.port,
-      secure: cfg.port === 465,
+      secure: cfg.port === 465, // true = TLS implicite (465), false = STARTTLS (587, ex: Brevo)
       auth:   { user: cfg.user, pass: cfg.password },
       tls:    { rejectUnauthorized: false }
     }),
@@ -244,7 +280,9 @@ module.exports = async function handler(req, res) {
   if (!process.env.UPSTASH_REDIS_REST_URL)  missingVars.push('UPSTASH_REDIS_REST_URL');
   if (!process.env.UPSTASH_REDIS_REST_TOKEN) missingVars.push('UPSTASH_REDIS_REST_TOKEN');
   if (!process.env.ENCRYPTION_KEY)          missingVars.push('ENCRYPTION_KEY');
-  // SMTP_HOST n'est plus vérifié ici : peut désormais venir de Redis (invoice:smtp)
+  // SMTP_HOST n'est plus vérifié ici : la config SMTP peut désormais venir
+  // de Redis (invoice:smtp, voir lib/smtp-config.js) plutôt que de l'env var —
+  // une absence des deux se révèlera à l'envoi réel (try/catch plus bas).
   if (missingVars.length > 0) {
     console.error('[reissue] Variables manquantes:', missingVars.join(', '));
     return res.status(500).json({ error: 'Configuration serveur incomplete: ' + missingVars.join(', ') });
@@ -366,12 +404,14 @@ module.exports = async function handler(req, res) {
         settings = rawSettings ? (isEncryptedValue(rawSettings) ? decrypt(rawSettings) : rawSettings) : {};
       } catch (e) {}
 
-      // La signature/logo est stockée séparément (invoice:signature, non chiffrée,
-      // car trop volumineuse pour vivre dans invoice:settings) — même pattern que
-      // poll-payments.js dans invoice-pwa
+      // La signature et le logo sont stockés séparément (invoice:signature,
+      // invoice:logo — non chiffrés, car trop volumineux pour vivre dans
+      // invoice:settings) — même pattern que poll-payments.js dans invoice-pwa
       let signatureB64 = null;
+      let logoB64      = null;
       try {
         signatureB64 = await redisGet('invoice:signature');
+        logoB64      = await redisGet('invoice:logo');
       } catch (e) {}
 
       // Enrichir la facture avec le praticien si absent
@@ -380,7 +420,7 @@ module.exports = async function handler(req, res) {
       }
 
       // Générer le PDF
-      const pdfBase64 = await generateInvoicePDF(facture, settings, signatureB64);
+      const pdfBase64 = await generateInvoicePDF(facture, settings, signatureB64, logoB64);
 
       // Envoyer email au patient
       await sendInvoiceEmail(email, patientName, facture, pdfBase64, settings);

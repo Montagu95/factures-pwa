@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /paiement-merci.html
+
+Sitemap: https://www.meignant.net/sitemap.xml
