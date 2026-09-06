@@ -547,7 +547,6 @@
       <a href="#apropos">À propos</a>
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
-      <a href="/articles.html">Articles</a>
       <details class="nav-dropdown">
         <summary>Espace patient</summary>
         <div class="nav-dropdown-menu">
@@ -833,6 +832,10 @@
           <label>Montant à régler (€)</label>
           <input type="number" id="montantPayer" min="0.50" step="0.01" inputmode="decimal" />
         </div>
+        <div class="field">
+          <label>Date de la consultation prévue</label>
+          <input type="date" id="dateConsultationPayer" />
+        </div>
 
         <!-- Honeypot invisible — rempli uniquement par les bots -->
         <div class="honeypot" aria-hidden="true">
@@ -953,7 +956,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.12</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.13</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
@@ -1102,6 +1105,7 @@ async function payerConsultation() {
   const nom     = document.getElementById('nomPayer').value.trim();
   const email   = document.getElementById('emailPayer').value.trim();
   const montant = document.getElementById('montantPayer').value.trim();
+  const dateConsultation = document.getElementById('dateConsultationPayer').value;
   const btn     = document.getElementById('btnPayer');
   const alrt    = document.getElementById('alertPayer');
 
@@ -1111,6 +1115,7 @@ async function payerConsultation() {
   if (!prenom || !nom)   return showPayerAlert('error', 'Veuillez indiquer votre prenom et votre nom.');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showPayerAlert('error', 'Adresse email invalide.');
   if (!montant || parseFloat(montant) <= 0) return showPayerAlert('error', 'Veuillez indiquer le montant a regler.');
+  if (!dateConsultation) return showPayerAlert('error', 'Veuillez indiquer la date de votre consultation.');
   if (!checkHuman('hpPayer', 'humanPayer', showPayerAlert)) return;
   if (!checkConsent('consentPayer', showPayerAlert)) return;
 
@@ -1121,7 +1126,7 @@ async function payerConsultation() {
     const res  = await fetch('/api/prepay-consultation', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prenom, nom, email, montant })
+      body: JSON.stringify({ prenom, nom, email, montant, dateConsultation })
     });
     const data = await res.json();
     if (!res.ok) {
@@ -1133,7 +1138,7 @@ async function payerConsultation() {
       setTimeout(function() { window.location.href = data.paymentURL; }, 900);
     } else {
       showPayerAlert('info', '\u2139\ufe0f ' + data.message);
-      ['prenomPayer','nomPayer','emailPayer','montantPayer'].forEach(function(id) {
+      ['prenomPayer','nomPayer','emailPayer','montantPayer','dateConsultationPayer'].forEach(function(id) {
         document.getElementById(id).value = '';
       });
       document.getElementById('humanPayer').checked = false;
