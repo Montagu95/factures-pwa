@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Consultation vidéo — Yolène Meignant</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.srv.whereby.com/embed/v2-embed.js" type="module"></script>
+  <style>
+    :root {
+      --rose:    #c9748f;
+      --rose-l:  #e8b4c2;
+      --rose-bg: #fdf0f4;
+      --mauve:   #8e6b8e;
+      --cream:   #faf7f5;
+      --text:    #3d2b2b;
+      --muted:   #8a7070;
+      --border:  #e8d8d8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Nunito', sans-serif; color: var(--text); background: var(--cream);
+      display: flex; flex-direction: column; min-height: 100dvh;
+    }
+    header {
+      padding: 14px 20px; text-align: center; border-bottom: 1px solid var(--border);
+      background: white;
+    }
+    header .brand {
+      font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; color: var(--mauve);
+    }
+    header .sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    main { flex: 1; position: relative; display: flex; }
+
+    whereby-embed { flex: 1; width: 100%; }
+
+    /* Écran superposé : attente / erreur / fin de consultation */
+    .overlay {
+      position: absolute; inset: 0;
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; text-align: center; padding: 32px 24px;
+      z-index: 10;
+    }
+    .overlay .icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .overlay h1 {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--mauve);
+      margin-bottom: 10px; max-width: 420px;
+    }
+    .overlay p { font-size: 0.92rem; color: var(--muted); max-width: 380px; line-height: 1.6; }
+    .pulse {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--rose);
+      display: inline-block; margin-top: 20px;
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: .3; transform: scale(0.85); }
+      50%      { opacity: 1;  transform: scale(1.15); }
+    }
+    .btn-retour {
+      margin-top: 24px; display: inline-block;
+      background: var(--rose); color: white; text-decoration: none;
+      padding: 10px 22px; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Ouvertures Psy</div>
+  <div class="sub">Consultation en visioconférence</div>
+</header>
+
+<main id="main">
+  <!-- Le composant Whereby est ajouté dynamiquement en JS une fois le lien validé -->
+
+  <div class="overlay" id="overlayAttente" style="display:none">
+    <div class="icon">🛋️</div>
+    <h1>En attente que votre praticienne rejoigne la consultation…</h1>
+    <p>Restez sur cette page — l'appel démarrera automatiquement dès qu'elle sera en ligne. Vérifiez que votre caméra et votre micro sont autorisés dans votre navigateur.</p>
+    <span class="pulse"></span>
+  </div>
+
+  <div class="overlay" id="overlayTerminee" style="display:none">
+    <div class="icon">💐</div>
+    <h1>La consultation est terminée</h1>
+    <p>Merci. Votre facture vous sera envoyée par email dès sa génération. Vous pouvez fermer cette page.</p>
+  </div>
+
+  <div class="overlay" id="overlayErreur" style="display:none">
+    <div class="icon">⚠️</div>
+    <h1>Lien invalide ou expiré</h1>
+    <p>Ce lien de consultation n'est plus valide. Contactez votre praticienne pour en obtenir un nouveau.</p>
+    <a class="btn-retour" href="/">Retour à l'accueil</a>
+  </div>
+</main>
+
+<script type="module">
+  const params    = new URLSearchParams(window.location.search);
+  const roomUrl   = params.get('room');
+  const meetingId = params.get('meeting');
+
+  const main            = document.getElementById('main');
+  const overlayAttente  = document.getElementById('overlayAttente');
+  const overlayTerminee = document.getElementById('overlayTerminee');
+  const overlayErreur   = document.getElementById('overlayErreur');
+
+  if (!roomUrl) {
+    overlayErreur.style.display = 'flex';
+  } else {
+    overlayAttente.style.display = 'flex';
+
+    const embed = document.createElement('whereby-embed');
+    // Interface allégée côté patient : pas de partage d'écran, pas de chat,
+    // pas de liste de participants (masque au passage le panneau d'invitation)
+    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'screenshare=off&chat=off&people=off&lang=fr');
+    main.insertBefore(embed, overlayAttente);
+
+    let sessionTerminee = false;
+
+    function afficherFin() {
+      if (sessionTerminee) return;
+      sessionTerminee = true;
+      overlayAttente.style.display  = 'none';
+      overlayTerminee.style.display = 'flex';
+      embed.remove();
+      clearInterval(pollInterval);
+    }
+
+    embed.addEventListener('participantupdate', (event) => {
+      const count = event.detail && event.detail.count;
+      if (count >= 2) overlayAttente.style.display = 'none';
+      else if (!sessionTerminee) overlayAttente.style.display = 'flex';
+    });
+
+    embed.addEventListener('leave', afficherFin);
+
+    // Filet de sécurité : si la praticienne termine côté sogecommerce-pwa,
+    // le statut est marqué côté serveur — on le vérifie régulièrement, car
+    // l'événement Whereby "leave" ne se déclenche pas toujours de façon fiable
+    // quand la salle est supprimée pendant qu'on y est déjà.
+    let pollInterval;
+    if (meetingId) {
+      pollInterval = setInterval(async () => {
+        try {
+          const res  = await fetch('/api/whereby-status?meetingId=' + encodeURIComponent(meetingId));
+          const data = await res.json();
+          if (data.ended) afficherFin();
+        } catch (e) { /* silencieux — nouvelle tentative au prochain intervalle */ }
+      }, 5000);
+    }
+  }
+</script>
+
+</body>
+</html>
