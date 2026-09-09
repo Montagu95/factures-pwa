@@ -53,6 +53,19 @@
       margin-bottom: 10px; max-width: 420px;
     }
     .overlay p { font-size: 0.92rem; color: var(--muted); max-width: 380px; line-height: 1.6; }
+
+    /* Bandeau d'attente : non-bloquant, superposé en haut de l'appel plutôt
+       que de couvrir tout l'écran — si la détection "praticienne en ligne"
+       échoue ou tarde, le patient peut quand même voir et utiliser l'appel. */
+    .bandeau-attente {
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      z-index: 10; background: white; border: 1px solid var(--border);
+      border-radius: 30px; padding: 10px 20px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 16px rgba(142,107,142,.15);
+      font-size: 0.85rem; color: var(--mauve); font-weight: 600;
+      max-width: calc(100% - 40px); text-align: center;
+    }
     .pulse {
       width: 10px; height: 10px; border-radius: 50%; background: var(--rose);
       display: inline-block; margin-top: 20px;
@@ -79,17 +92,16 @@
 <main id="main">
   <!-- Le composant Whereby est ajouté dynamiquement en JS une fois le lien validé -->
 
-  <div class="overlay" id="overlayAttente" style="display:none">
-    <div class="icon">🛋️</div>
-    <h1>En attente que votre praticienne rejoigne la consultation…</h1>
-    <p>Restez sur cette page — l'appel démarrera automatiquement dès qu'elle sera en ligne. Vérifiez que votre caméra et votre micro sont autorisés dans votre navigateur.</p>
-    <span class="pulse"></span>
+  <div class="bandeau-attente" id="bandeauAttente" style="display:none">
+    <span class="pulse" style="margin-top:0"></span>
+    En attente que votre praticienne rejoigne la consultation…
   </div>
 
   <div class="overlay" id="overlayTerminee" style="display:none">
     <div class="icon">💐</div>
     <h1>La consultation est terminée</h1>
-    <p>Merci. Votre facture vous sera envoyée par email dès sa génération. Vous pouvez fermer cette page.</p>
+    <p id="messageTerminee">Merci pour cette consultation.</p>
+    <p style="font-size:0.8rem;margin-top:16px;">Retour automatique à l'accueil dans <span id="compteurRetour">5</span> secondes…</p>
   </div>
 
   <div class="overlay" id="overlayErreur" style="display:none">
@@ -105,37 +117,52 @@
   const roomUrl   = params.get('room');
   const meetingId = params.get('meeting');
 
-  const main            = document.getElementById('main');
-  const overlayAttente  = document.getElementById('overlayAttente');
-  const overlayTerminee = document.getElementById('overlayTerminee');
-  const overlayErreur   = document.getElementById('overlayErreur');
+  const main             = document.getElementById('main');
+  const bandeauAttente   = document.getElementById('bandeauAttente');
+  const overlayTerminee  = document.getElementById('overlayTerminee');
+  const overlayErreur    = document.getElementById('overlayErreur');
 
   if (!roomUrl) {
     overlayErreur.style.display = 'flex';
   } else {
-    overlayAttente.style.display = 'flex';
+    bandeauAttente.style.display = 'flex';
 
     const embed = document.createElement('whereby-embed');
     // Interface allégée côté patient : pas de partage d'écran, pas de chat,
     // pas de liste de participants (masque au passage le panneau d'invitation)
     embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'screenshare=off&chat=off&people=off&lang=fr');
-    main.insertBefore(embed, overlayAttente);
+    main.insertBefore(embed, bandeauAttente);
 
     let sessionTerminee = false;
 
     function afficherFin() {
       if (sessionTerminee) return;
       sessionTerminee = true;
-      overlayAttente.style.display  = 'none';
+      bandeauAttente.style.display  = 'none';
       overlayTerminee.style.display = 'flex';
       embed.remove();
       clearInterval(pollInterval);
+
+      // Retour automatique à l'accueil après 5 secondes
+      let secondes = 5;
+      const compteurEl = document.getElementById('compteurRetour');
+      const redirTimer = setInterval(() => {
+        secondes--;
+        if (compteurEl) compteurEl.textContent = secondes;
+        if (secondes <= 0) {
+          clearInterval(redirTimer);
+          window.location.href = 'https://www.meignant.net/';
+        }
+      }, 1000);
     }
 
+    // Le bandeau d'attente est purement indicatif — il n'empêche jamais de
+    // voir ou d'utiliser l'appel en dessous, même si cette détection du
+    // nombre de participants ne se déclenche pas comme prévu.
     embed.addEventListener('participantupdate', (event) => {
       const count = event.detail && event.detail.count;
-      if (count >= 2) overlayAttente.style.display = 'none';
-      else if (!sessionTerminee) overlayAttente.style.display = 'flex';
+      if (count >= 2) bandeauAttente.style.display = 'none';
+      else if (!sessionTerminee) bandeauAttente.style.display = 'flex';
     });
 
     embed.addEventListener('leave', afficherFin);
