@@ -101,7 +101,7 @@
     <div class="icon">💐</div>
     <h1>La consultation est terminée</h1>
     <p id="messageTerminee">Merci pour cette consultation.</p>
-    <p style="font-size:0.8rem;margin-top:16px;">Retour automatique à l'accueil dans <span id="compteurRetour">15</span> secondes…</p>
+    <p style="font-size:0.8rem;margin-top:16px;">Retour automatique à l'accueil dans <span id="compteurRetour">5</span> secondes…</p>
   </div>
 
   <div class="overlay" id="overlayErreur" style="display:none">
@@ -143,8 +143,8 @@
       embed.remove();
       clearInterval(pollInterval);
 
-      // Retour automatique à l'accueil après 15 secondes
-      let secondes = 15;
+      // Retour automatique à l'accueil après 5 secondes
+      let secondes = 5;
       const compteurEl = document.getElementById('compteurRetour');
       const redirTimer = setInterval(() => {
         secondes--;
