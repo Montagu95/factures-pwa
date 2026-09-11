@@ -1,29 +1,3 @@
-/**
- * api/backoffice.js
- * Portail interne (protégé Basic Auth) donnant accès aux 3 outils du
- * cabinet, chacun hébergé sur sa propre application :
- *   - Lien de paiements    → sogecommerce-pwa
- *   - Facturation          → invoice-pwa
- *   - Consultation vidéo   → sogecommerce-pwa (onglet vidéo, lien profond)
- *
- * Volontairement une simple page de liens, pas une réimplémentation :
- * le plan Vercel Hobby limite à 12 fonctions serverless par déploiement.
- * invoice-pwa (10) et sogecommerce-pwa (11) sont déjà proches de cette
- * limite chacune — les fusionner dépasserait largement le plafond. Cette
- * page reste donc volontairement légère (aucune logique dupliquée).
- */
-
-'use strict';
-
-const { checkBasicAuth } = require('../lib/auth-basic');
-
-module.exports = async function handler(req, res) {
-  if (!checkBasicAuth(req, res)) return;
-
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-store');
-  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-
   res.status(200).send(`<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -102,5 +76,4 @@ module.exports = async function handler(req, res) {
 
   <footer>Chaque outil s'ouvre dans son application dédiée.</footer>
 </body>
-</html>`);
-};
+</html>
