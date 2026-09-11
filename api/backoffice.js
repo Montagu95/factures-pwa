@@ -31,7 +31,10 @@ module.exports = async function handler(req, res) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Backoffice — Ouvertures Psy</title>
-  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon-backoffice.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-backoffice-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-backoffice-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-backoffice.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
