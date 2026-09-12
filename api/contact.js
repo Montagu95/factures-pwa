@@ -19,6 +19,7 @@ try {
 } catch (e) {}
 
 const crypto            = require('crypto');
+const dns               = require('dns').promises;
 const nodemailer        = require('nodemailer');
 const { checkRateLimit } = require('../lib/rate-limit');
 const { decrypt }        = require('../lib/crypto-utils');
@@ -84,6 +85,22 @@ async function verifierDefi(token, reponse) {
   return parseInt(reponse, 10) === parseInt(attendu, 10);
 }
 
+// ─── Vérification du domaine email (MX, avec repli A/AAAA) ─────────────────
+// Ne garantit pas qu'une boîte précise existe, seulement que le domaine
+// accepte du courrier — bloque les domaines inventés ou inexistants sans
+// ajouter de friction (aucune étape supplémentaire pour le visiteur).
+async function domaineAUnServeurMail(email) {
+  const domaine = (email.split('@')[1] || '').toLowerCase();
+  if (!domaine) return false;
+  try {
+    const mx = await dns.resolveMx(domaine);
+    if (mx && mx.length > 0) return true;
+  } catch (e) { /* pas de MX, on tente le repli ci-dessous */ }
+  try { await dns.resolve4(domaine); return true; } catch (e) {}
+  try { await dns.resolve6(domaine); return true; } catch (e) {}
+  return false;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -119,6 +136,10 @@ module.exports = async function handler(req, res) {
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Adresse email invalide' });
+  }
+  const domaineValide = await domaineAUnServeurMail(email);
+  if (!domaineValide) {
+    return res.status(400).json({ error: 'Le domaine de cette adresse email ne semble pas exister. Veuillez verifier votre saisie.' });
   }
   if (message.length > 2000) {
     return res.status(400).json({ error: 'Message trop long (2000 caractères max)' });
