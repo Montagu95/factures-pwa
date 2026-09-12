@@ -547,7 +547,6 @@
       <a href="#apropos">À propos</a>
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
-      <a href="/articles.html">Articles</a>
       <details class="nav-dropdown">
         <summary>Espace patient</summary>
         <div class="nav-dropdown-menu">
@@ -873,11 +872,7 @@
         <h2 class="section-title">Prendre rendez-vous</h2>
         <div class="divider"></div>
         <p style="color:var(--muted);font-size:.93rem;margin-bottom:4px">Les consultations ont lieu en visioconférence, sur rendez-vous uniquement.</p>
-        <p style="color:var(--muted);font-size:.82rem;margin-bottom:12px">En cas de problème technique, ou d'un commun accord, la séance peut se dérouler par téléphone (audio).</p>
-        <div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:.88rem;color:#92400e;line-height:1.6;">
-          <strong>⚠️ Formulaire réservé aux patients suivis</strong><br/>
-          Ce formulaire de contact est exclusivement réservé aux patients déjà suivis. Pour une première prise de contact ou une nouvelle demande de prise en charge, merci de nous joindre directement par téléphone.
-        </div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:20px">En cas de problème technique, ou d'un commun accord, la séance peut se dérouler par téléphone (audio).</p>
         <div class="contact-infos">
           <div class="contact-card">
             <div class="icon">💻</div>
@@ -899,7 +894,7 @@
 
       <div class="contact-form-card">
         <h3>Envoyer un message</h3>
-        <p class="desc">Réservé aux patients déjà suivis. Indiquez votre prénom et nom tels qu'enregistrés lors de votre suivi.</p>
+        <p class="desc">Patient déjà suivi ou première prise de contact : ce formulaire vous est ouvert.</p>
         <div class="field-row">
           <div class="field">
             <label>Prénom</label>
@@ -930,6 +925,11 @@
           <label>Ne pas remplir ce champ</label>
           <input type="text" id="hpContact" name="url" tabindex="-1" autocomplete="off" />
         </div>
+        <!-- Anti-bot : petit calcul généré côté serveur -->
+        <div class="field">
+          <label id="labelCaptcha">Vérification anti-robot : combien font … ?</label>
+          <input type="number" id="captchaReponseContact" inputmode="numeric" placeholder="Votre réponse" autocomplete="off" />
+        </div>
         <!-- Checkbox humain -->
         <label class="human-check">
           <input type="checkbox" id="humanContact" />
@@ -956,7 +956,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.24</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.25</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
@@ -1044,12 +1044,31 @@ function showAlert(type, msg) {
 }
 
 // ── Formulaire contact ────────────────────────────────────────────────────────
+let defiContact = null;
+
+async function chargerDefiContact() {
+  try {
+    const res  = await fetch('/api/contact?action=challenge');
+    const data = await res.json();
+    defiContact = data;
+    const label = document.getElementById('labelCaptcha');
+    if (label) label.textContent = `Vérification anti-robot : combien font ${data.a} + ${data.b} ?`;
+    const champ = document.getElementById('captchaReponseContact');
+    if (champ) champ.value = '';
+  } catch (e) {
+    console.error('[contact] Chargement du défi anti-bot échoué:', e.message);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', chargerDefiContact);
+
 async function envoyerContact() {
   const prenom  = document.getElementById('contactPrenom').value.trim();
   const nom     = document.getElementById('contactNom').value.trim();
   const email   = document.getElementById('contactEmail').value.trim();
   const sujet   = document.getElementById('contactSujet').value.trim();
   const message = document.getElementById('contactMessage').value.trim();
+  const captchaReponse = document.getElementById('captchaReponseContact').value.trim();
   const btn     = document.getElementById('btnContact');
   const alrt    = document.getElementById('alertContact');
 
@@ -1060,6 +1079,7 @@ async function envoyerContact() {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showContactAlert('error', 'Adresse email invalide.');
   if (!sujet)            return showContactAlert('error', 'Veuillez indiquer un sujet.');
   if (!message)          return showContactAlert('error', 'Veuillez ecrire votre message.');
+  if (!captchaReponse)   return showContactAlert('error', 'Veuillez repondre a la verification anti-robot.');
   if (!checkHuman('hpContact', 'humanContact', showContactAlert)) return;
   if (!checkConsent('consentContact', showContactAlert)) return;
 
@@ -1070,20 +1090,25 @@ async function envoyerContact() {
     const res  = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prenom, nom, email, sujet, message })
+      body: JSON.stringify({
+        prenom, nom, email, sujet, message,
+        captchaToken: defiContact && defiContact.token,
+        captchaReponse
+      })
     });
     const data = await res.json();
-    if (res.status === 403) {
-      showContactAlert('info', data.error);
+    if (!res.ok) {
+      showContactAlert('error', data.error || 'Erreur envoi. Veuillez reessayer.');
+      await chargerDefiContact();
       return;
     }
-    if (!res.ok) throw new Error(data.error || 'Erreur');
     showContactAlert('success', '\u2713 Votre message a bien ete envoye. Je vous repondrai dans les meilleurs delais.');
     ['contactPrenom','contactNom','contactEmail','contactSujet','contactMessage'].forEach(function(id) {
       document.getElementById(id).value = '';
     });
     document.getElementById('humanContact').checked = false;
     document.getElementById('consentContact').checked = false;
+    await chargerDefiContact();
   } catch (e) {
     showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
