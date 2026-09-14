@@ -2,6 +2,7 @@
   "version": 2,
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/backoffice", "destination": "/backoffice.html" }
+    { "source": "/backoffice", "destination": "/backoffice.html" },
+    { "source": "/reglages", "destination": "/reglages.html" }
   ]
 }

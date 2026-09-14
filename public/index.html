@@ -547,7 +547,6 @@
       <a href="#apropos">À propos</a>
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
-      <a href="/articles.html">Articles</a>
       <details class="nav-dropdown">
         <summary>Espace patient</summary>
         <div class="nav-dropdown-menu">
@@ -957,7 +956,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.26</span>
+  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.28</span>
   <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
@@ -1100,7 +1099,7 @@ async function envoyerContact() {
     const data = await res.json();
     if (!res.ok) {
       showContactAlert('error', data.error || 'Erreur envoi. Veuillez reessayer.');
-      await chargerDefiContact(); // jeton a usage unique : en recharger un neuf pour reessayer
+      await chargerDefiContact();
       return;
     }
     showContactAlert('success', '\u2713 Votre message a bien ete envoye. Je vous repondrai dans les meilleurs delais.');
@@ -1109,7 +1108,7 @@ async function envoyerContact() {
     });
     document.getElementById('humanContact').checked = false;
     document.getElementById('consentContact').checked = false;
-    await chargerDefiContact(); // prêt pour un eventuel nouveau message
+    await chargerDefiContact();
   } catch (e) {
     showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
@@ -1206,5 +1205,6 @@ document.getElementById('navLinks').querySelectorAll('a').forEach(function(link)
 
 </script>
 
+  <script defer src="/speed-insights.js"></script>
 </body>
 </html>
