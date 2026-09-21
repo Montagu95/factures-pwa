@@ -547,6 +547,7 @@
       <a href="#apropos">À propos</a>
       <a href="#approche">Approche</a>
       <a href="#publics">Consultations</a>
+      <a href="/articles.html">Articles</a>
       <details class="nav-dropdown">
         <summary>Espace patient</summary>
         <div class="nav-dropdown-menu">
@@ -1099,7 +1100,7 @@ async function envoyerContact() {
     const data = await res.json();
     if (!res.ok) {
       showContactAlert('error', data.error || 'Erreur envoi. Veuillez reessayer.');
-      await chargerDefiContact();
+      await chargerDefiContact(); // jeton a usage unique : en recharger un neuf pour reessayer
       return;
     }
     showContactAlert('success', '\u2713 Votre message a bien ete envoye. Je vous repondrai dans les meilleurs delais.');
@@ -1108,7 +1109,7 @@ async function envoyerContact() {
     });
     document.getElementById('humanContact').checked = false;
     document.getElementById('consentContact').checked = false;
-    await chargerDefiContact();
+    await chargerDefiContact(); // prêt pour un eventuel nouveau message
   } catch (e) {
     showContactAlert('error', 'Erreur envoi. Veuillez reessayer.');
   } finally {
