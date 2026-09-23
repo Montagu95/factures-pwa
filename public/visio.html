@@ -130,7 +130,12 @@
     const embed = document.createElement('whereby-embed');
     // Interface allégée côté patient : pas de partage d'écran, pas de chat,
     // pas de liste de participants (masque au passage le panneau d'invitation)
-    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'screenshare=off&chat=off&people=off&lang=fr');
+    // minimal : n'affiche que les boutons caméra/micro, masque chat, partage
+    // d'écran et logo Whereby. leaveButton=on réactive explicitement le
+    // bouton raccrocher (masqué par défaut avec minimal) — c'est justement
+    // LE bouton qu'une expérience "one-button façon WhatsApp" doit garder.
+    // cameraEffect=blur : flou accentué du fond, pas de fond image fixe.
+    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&cameraEffect=blur&lang=fr');
     main.insertBefore(embed, bandeauAttente);
 
     let sessionTerminee = false;
