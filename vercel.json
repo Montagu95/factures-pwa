@@ -3,9 +3,6 @@
   "outputDirectory": "public",
   "rewrites": [
     { "source": "/backoffice", "destination": "/backoffice.html" },
-    { "source": "/reglages", "destination": "/reglages.html" },
-    { "source": "/paiements", "destination": "/paiements.html" },
-    { "source": "/facturation", "destination": "/facturation.html" },
-    { "source": "/consultation-video", "destination": "/consultation-video.html" }
+    { "source": "/reglages", "destination": "/reglages.html" }
   ]
 }
