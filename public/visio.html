@@ -134,11 +134,12 @@
     // d'écran et logo Whereby. leaveButton=on réactive explicitement le
     // bouton raccrocher (masqué par défaut avec minimal) — c'est justement
     // LE bouton qu'une expérience "one-button façon WhatsApp" doit garder.
-    // cameraEffect=blur : flou accentué du fond, pas de fond image fixe.
     // floatSelf=on : le patient se voit en petit médaillon, la praticienne
     // occupe le grand écran principal (à l'inverse de la grille équilibrée
     // côté praticienne, qui elle voit les deux à taille égale).
-    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&cameraEffect=blur&floatSelf=on&lang=fr');
+    // Pas d'effet caméra ici volontairement : le réglage "Effet vidéo" ne
+    // s'applique qu'à la praticienne (voir sogecommerce-pwa), jamais au patient.
+    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&floatSelf=on&lang=fr');
     main.insertBefore(embed, bandeauAttente);
 
     let sessionTerminee = false;
