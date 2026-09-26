@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rejoindre votre consultation vidéo — Guide pas à pas | Ouvertures Psy</title>
+  <meta name="description" content="Un petit guide simple et illustré pour rejoindre votre consultation en visioconférence, étape par étape." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --rose:    #c9748f;
+      --rose-l:  #e8b4c2;
+      --rose-bg: #fdf0f4;
+      --mauve:   #8e6b8e;
+      --mauve-l: #c4a8c4;
+      --cream:   #faf7f5;
+      --text:    #3d2b2b;
+      --muted:   #8a7070;
+      --border:  #e8d8d8;
+      --white:   #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; color: var(--text); background: var(--cream); line-height: 1.7; }
+
+    nav {
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      position: sticky; top: 0;
+      box-shadow: 0 2px 12px rgba(201,116,143,.08);
+      z-index: 10;
+    }
+    .nav-inner {
+      max-width: 720px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-back {
+      font-size: 0.85rem; color: var(--muted); text-decoration: none;
+      font-weight: 500; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-back:hover { color: var(--rose); }
+    .nav-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 600; color: var(--mauve);
+    }
+
+    main {
+      max-width: 720px; margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .intro-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--mauve);
+      margin-bottom: 16px; line-height: 1.3;
+    }
+    .chapo {
+      font-size: 1.02rem; color: var(--text); margin-bottom: 12px;
+    }
+    .chapo.muted { color: var(--muted); font-size: 0.92rem; margin-bottom: 40px; }
+
+    .etape {
+      background: white; border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; margin-bottom: 24px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .etape { flex-direction: row; align-items: center; gap: 28px; }
+      .etape.inverse { flex-direction: row-reverse; }
+    }
+    .etape-texte { flex: 1.2; }
+    .etape-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--rose-bg); color: var(--rose);
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+    .etape-titre {
+      font-family: 'Playfair Display', serif; font-size: 1.15rem;
+      color: var(--mauve); margin-bottom: 8px;
+    }
+    .etape-texte p { font-size: 0.92rem; color: var(--text); margin-bottom: 8px; }
+    .etape-texte p:last-child { margin-bottom: 0; }
+    .etape-image { flex: 1; text-align: center; }
+    .etape-image img {
+      max-width: 100%; width: 220px; border-radius: 12px;
+      border: 1px solid var(--border); box-shadow: 0 6px 20px rgba(142,107,142,.12);
+    }
+    .etape-image.large img { width: 100%; max-width: 320px; }
+
+    .astuce {
+      background: var(--rose-bg); border-radius: 12px; padding: 14px 18px;
+      font-size: 0.85rem; color: var(--text); margin-top: 4px;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .astuce .puce { flex-shrink: 0; }
+
+    .fin {
+      text-align: center; margin-top: 48px; padding: 32px 24px;
+      background: white; border-radius: 16px; border: 1px solid var(--border);
+    }
+    .fin .icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .fin h2 {
+      font-family: 'Playfair Display', serif; color: var(--mauve);
+      font-size: 1.25rem; margin-bottom: 8px;
+    }
+    .fin p { font-size: 0.92rem; color: var(--muted); }
+
+    .contact-lien {
+      display: inline-block; margin-top: 16px;
+      color: var(--rose); text-decoration: underline; font-size: 0.88rem; font-weight: 600;
+    }
+
+    footer {
+      text-align: center; padding: 24px; font-size: 0.78rem; color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand-name">Ouvertures Psy</span>
+    <a href="/" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour au site
+    </a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="intro-icon">🌿</div>
+  <h1>Rejoindre votre consultation vidéo, sans stress</h1>
+  <p class="chapo">
+    Pas besoin d'être à l'aise avec les ordinateurs ou les téléphones pour arriver à ce rendez-vous. Il suffit de suivre ces quelques étapes, dans l'ordre — comme on suit un chemin de jardin, une pierre après l'autre.
+  </p>
+  <p class="chapo muted">
+    Prévoyez d'ouvrir ce lien environ 5 minutes avant l'heure de votre rendez-vous, tranquillement installé·e, avec une bonne connexion internet ou du Wi-Fi.
+  </p>
+
+  <div class="etape">
+    <div class="etape-texte">
+      <div class="etape-num">1</div>
+      <div class="etape-titre">Ouvrez l'email reçu</div>
+      <p>
+        À l'heure convenue (ou juste avant), retrouvez l'email intitulé <strong>« Votre consultation vidéo »</strong> dans votre boîte de messagerie.
+      </p>
+      <p>
+        Un bouton rose <strong>« Rejoindre la consultation »</strong> vous y attend. Un simple appui (ou clic) suffit.
+      </p>
+    </div>
+    <div class="etape-image">
+      <img src="/images/tuto-visio/etape1-email.jpg" alt="Email reçu avec le bouton Rejoindre la consultation" />
+    </div>
+  </div>
+
+  <div class="etape inverse">
+    <div class="etape-texte">
+      <div class="etape-num">2</div>
+      <div class="etape-titre">Une page s'ouvre, et vous attend</div>
+      <p>
+        Une nouvelle page apparaît, à vos couleurs — celles d'Ouvertures Psy. Un petit message vous informe que la consultation vous attend :
+      </p>
+      <p><em>« En attente que votre praticienne rejoigne la consultation… »</em></p>
+      <p>
+        C'est tout à fait normal, même si vous arrivez pile à l'heure : c'est simplement le signe que tout est prêt de votre côté.
+      </p>
+    </div>
+    <div class="etape-image">
+      <img src="/images/tuto-visio/etape2-autorisation.jpg" alt="Page d'attente de la consultation, avec la demande d'autorisation caméra et micro" />
+    </div>
+  </div>
+
+  <div class="etape">
+    <div class="etape-texte">
+      <div class="etape-num">3</div>
+      <div class="etape-titre">Autorisez la caméra et le micro</div>
+      <p>
+        Pour que votre praticienne puisse vous voir et vous entendre, votre téléphone ou votre ordinateur va vous demander la permission. C'est une simple question de sécurité : elle ne sera posée qu'une fois.
+      </p>
+      <p>
+        Une fenêtre apparaît, du type <strong>« Autoriser [le site] à utiliser votre caméra et votre micro ? »</strong> — appuyez simplement sur <strong>« Autoriser »</strong>.
+      </p>
+      <div class="astuce">
+        <span class="puce">💡</span>
+        <span>Si vous appuyez par erreur sur « Ne pas autoriser », pas d'inquiétude : rechargez simplement la page pour que la question réapparaisse.</span>
+      </div>
+    </div>
+    <div class="etape-image">
+      <img src="/images/tuto-visio/etape3-navigateur.jpg" alt="Fenêtre du navigateur demandant l'autorisation d'utiliser la caméra et le micro" />
+    </div>
+  </div>
+
+  <div class="fin">
+    <div class="icon">🕊️</div>
+    <h2>Il ne reste plus qu'à patienter un instant</h2>
+    <p>
+      Dès que votre praticienne rejoint à son tour, votre image apparaît automatiquement — vous n'avez rien d'autre à faire. La consultation commence, dans le calme, exactement comme si vous étiez dans son cabinet.
+    </p>
+    <a href="/#contact" class="contact-lien">Un souci technique le jour J ? Contactez-nous</a>
+  </div>
+
+</main>
+
+<footer>
+  Ouvertures Psy — EI Yolène Meignant · <a href="/">Retour à l'accueil</a>
+</footer>
+
+  <script defer src="/speed-insights.js"></script>
+</body>
+</html>
