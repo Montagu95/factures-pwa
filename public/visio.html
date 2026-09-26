@@ -116,6 +116,7 @@
   const params    = new URLSearchParams(window.location.search);
   const roomUrl   = params.get('room');
   const meetingId = params.get('meeting');
+  const prenom    = params.get('prenom');
 
   const main             = document.getElementById('main');
   const bandeauAttente   = document.getElementById('bandeauAttente');
@@ -139,7 +140,11 @@
     // côté praticienne, qui elle voit les deux à taille égale).
     // Pas d'effet caméra ici volontairement : le réglage "Effet vidéo" ne
     // s'applique qu'à la praticienne (voir sogecommerce-pwa), jamais au patient.
-    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&floatSelf=on&lang=fr');
+    // displayName : prénom du patient tel que résolu côté praticienne au
+    // moment de créer le lien — absent (repli sur "Patient") si nouveau
+    // patient sans dossier.
+    const displayName = prenom ? prenom : 'Patient';
+    embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&floatSelf=on&lang=fr&displayName=' + encodeURIComponent(displayName));
     main.insertBefore(embed, bandeauAttente);
 
     let sessionTerminee = false;
