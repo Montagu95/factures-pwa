@@ -134,7 +134,7 @@
       display: none;
       background: none; border: none; cursor: pointer;
       width: 40px; height: 40px;
-      align-items: center; justify-content: center;
+      flex-direction: column; align-items: center; justify-content: center;
       border-radius: 8px;
     }
     .nav-burger:hover { background: var(--rose-bg); }
@@ -143,9 +143,9 @@
       background: var(--mauve); margin: 3px 0;
       transition: transform .25s, opacity .25s;
     }
-    .nav-burger.open span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+    .nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .nav-burger.open span:nth-child(2) { opacity: 0; }
-    .nav-burger.open span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     @media (max-width: 860px) {
       .nav-links {
@@ -161,7 +161,7 @@
         transition: max-height .25s ease, opacity .2s ease, padding .25s ease;
       }
       .nav-links.open {
-        max-height: 400px; opacity: 1;
+        max-height: 80vh; overflow-y: auto; opacity: 1;
         padding: 12px 24px 20px;
       }
       .nav-links a { padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -537,6 +537,7 @@
     .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
     @media (max-width: 900px) {
       .nav-links a { min-height: 48px; display: flex; align-items: center; }
+      .nav-links a.nav-cta { justify-content: center; }
     }
     input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
     .human-check { min-height: 48px; }
@@ -977,7 +978,7 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.8rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.39</span>
+  <span style="margin-top:8px;display:block;font-size:.8rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.40</span>
   <span style="margin-top:4px;display:block;font-size:.8rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
