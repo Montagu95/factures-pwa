@@ -78,6 +78,26 @@
       text-align: center; padding: 32px 24px; font-size: 0.85rem;
     }
     footer a { color: rgba(255,255,255,.85); }
+  
+    /* ── Accessibilité mobile : cibles tactiles ≥ 48 px, texte ≥ 12 px ── */
+    .nav-brand { min-height: 48px; }
+    .nav-back { display: inline-flex; align-items: center; min-height: 48px; }
+    .nav-burger { width: 48px; height: 48px; }
+    .nav-dropdown summary { min-height: 48px; display: flex; align-items: center; }
+    .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
+    @media (max-width: 900px) {
+      .nav-links a { min-height: 48px; display: flex; align-items: center; }
+    }
+    input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
+    .human-check { min-height: 48px; }
+    .human-check input[type="checkbox"] { width: 28px; height: 28px; }
+    footer a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; }
+    /* Liens dans un texte : zone de toucher agrandie sans modifier la mise en page */
+    p a, .human-check a, a.inline { display: inline-block; padding: 14px 6px; margin: -14px -6px; }
+    footer a { min-width: 48px; justify-content: center; }
+    .btn-submit { min-height: 48px; }
+    a.nav-brand-name { display: inline-flex; align-items: center; min-height: 48px; }
+    a.contact-lien { min-height: 48px; }
   </style>
 </head>
 <body>

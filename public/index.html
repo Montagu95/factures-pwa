@@ -79,7 +79,7 @@
       font-size: 1rem; font-weight: 600;
       color: var(--mauve);
     }
-    .nav-brand-sub { font-size: 0.72rem; color: var(--muted); }
+    .nav-brand-sub { font-size: 0.8rem; color: var(--muted); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a {
       font-size: 0.85rem; color: var(--muted);
@@ -241,7 +241,7 @@
     .scroll-hint {
       position: absolute; bottom: 28px; left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,.6); font-size: 0.75rem;
+      color: rgba(255,255,255,.6); font-size: 0.8rem;
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       animation: bounce 2s infinite;
     }
@@ -252,7 +252,7 @@
     section { padding: 80px 24px; }
     .section-inner { max-width: 1000px; margin: 0 auto; }
     .section-tag {
-      font-size: 0.72rem; letter-spacing: 2px;
+      font-size: 0.8rem; letter-spacing: 2px;
       text-transform: uppercase; color: var(--rose);
       font-weight: 600; margin-bottom: 8px;
     }
@@ -311,7 +311,7 @@
       border-radius: 10px; padding: 12px 16px;
     }
     .credential-icon { font-size: 1.1rem; flex-shrink: 0; }
-    .credential-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .credential-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
     .credential-value { font-size: 0.88rem; font-weight: 600; color: var(--mauve); }
 
     /* ── Approche ── */
@@ -423,7 +423,7 @@
     }
     .field { margin-bottom: 16px; }
     .field label {
-      display: block; font-size: 0.75rem;
+      display: block; font-size: 0.8rem;
       font-weight: 600; color: var(--text);
       margin-bottom: 6px; text-transform: uppercase;
       letter-spacing: .5px;
@@ -491,7 +491,7 @@
     }
     .contact-card:hover { box-shadow: 0 6px 20px rgba(201,116,143,.1); }
     .contact-card .icon { font-size: 1.6rem; margin-bottom: 10px; }
-    .contact-card .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
+    .contact-card .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
     .contact-card .value { font-size: 0.88rem; font-weight: 600; color: var(--mauve); }
 
     /* ── Contact layout ── */
@@ -528,6 +528,26 @@
       font-size: 0.8rem; line-height: 1.8;
     }
     footer strong { color: white; }
+  
+    /* ── Accessibilité mobile : cibles tactiles ≥ 48 px, texte ≥ 12 px ── */
+    .nav-brand { min-height: 48px; }
+    .nav-back { display: inline-flex; align-items: center; min-height: 48px; }
+    .nav-burger { width: 48px; height: 48px; }
+    .nav-dropdown summary { min-height: 48px; display: flex; align-items: center; }
+    .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
+    @media (max-width: 900px) {
+      .nav-links a { min-height: 48px; display: flex; align-items: center; }
+    }
+    input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
+    .human-check { min-height: 48px; }
+    .human-check input[type="checkbox"] { width: 28px; height: 28px; }
+    footer a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; }
+    /* Liens dans un texte : zone de toucher agrandie sans modifier la mise en page */
+    p a, .human-check a, a.inline { display: inline-block; padding: 14px 6px; margin: -14px -6px; }
+    footer a { min-width: 48px; justify-content: center; }
+    .btn-submit { min-height: 48px; }
+    a.nav-brand-name { display: inline-flex; align-items: center; min-height: 48px; }
+    a.contact-lien { min-height: 48px; }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -957,8 +977,8 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.38</span>
-  <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
+  <span style="margin-top:8px;display:block;font-size:.8rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.39</span>
+  <span style="margin-top:4px;display:block;font-size:.8rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
 <script>
