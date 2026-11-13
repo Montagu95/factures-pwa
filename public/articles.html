@@ -64,7 +64,7 @@
     .nav-logo { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
     .nav-brand-text { line-height: 1.2; }
     .nav-brand-name { font-family: 'Playfair Display', serif; font-size: 0.98rem; font-weight: 600; color: var(--mauve); }
-    .nav-brand-sub { font-size: 0.72rem; color: var(--muted); }
+    .nav-brand-sub { font-size: 0.8rem; color: var(--muted); }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a { color: var(--text); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color .2s; }
     .nav-links a:hover { color: var(--rose); }
@@ -76,7 +76,7 @@
     /* ── En-tête de page ── */
     .page-header { padding: 64px 24px 40px; text-align: center; }
     .section-tag {
-      font-size: 0.72rem; letter-spacing: 2px;
+      font-size: 0.8rem; letter-spacing: 2px;
       text-transform: uppercase; color: var(--rose);
       font-weight: 600; margin-bottom: 8px;
     }
@@ -123,6 +123,27 @@
       text-align: center; padding: 40px 24px; font-size: 0.85rem;
     }
     footer a { color: inherit; }
+  
+    .a-pillars { margin: 8px 0 24px; line-height: 1.8; } .a-pillars a { color: var(--rose); font-weight: 600; display: inline-block; padding: 14px 4px; margin: -14px -4px; }
+    /* ── Accessibilité mobile : cibles tactiles ≥ 48 px, texte ≥ 12 px ── */
+    .nav-brand { min-height: 48px; }
+    .nav-back { display: inline-flex; align-items: center; min-height: 48px; }
+    .nav-burger { width: 48px; height: 48px; }
+    .nav-dropdown summary { min-height: 48px; display: flex; align-items: center; }
+    .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
+    @media (max-width: 900px) {
+      .nav-links a { min-height: 48px; display: flex; align-items: center; }
+    }
+    input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
+    .human-check { min-height: 48px; }
+    .human-check input[type="checkbox"] { width: 28px; height: 28px; }
+    footer a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; }
+    /* Liens dans un texte : zone de toucher agrandie sans modifier la mise en page */
+    p a, .human-check a, a.inline { display: inline-block; padding: 14px 6px; margin: -14px -6px; }
+    footer a { min-width: 48px; justify-content: center; }
+    .btn-submit { min-height: 48px; }
+    a.nav-brand-name { display: inline-flex; align-items: center; min-height: 48px; }
+    a.contact-lien { min-height: 48px; }
   </style>
 </head>
 <body>
@@ -133,7 +154,7 @@
       <img src="/images/logo.jpg" alt="Logo Ouvertures Psy" class="nav-logo" />
       <div class="nav-brand-text">
         <div class="nav-brand-name">Yolène Meignant</div>
-        <div class="nav-brand-sub">Psychologue clinicienne · Consultations en visioconférence</div>
+        <div class="nav-brand-sub">Psychologue clinicienne · Visioconférence et cabinet</div>
       </div>
     </a>
     <div class="nav-links">
@@ -148,6 +169,7 @@
 <div class="page-header">
   <p class="section-tag">Ressources</p>
   <h1>Articles &amp; réflexions</h1>
+  <p class="a-pillars">À lire en priorité : <a href="/articles/therapie-de-couple.html">thérapie de couple : quand et pourquoi consulter ?</a> · <a href="/articles/reconnaitre-burn-out.html">reconnaître les signes d'un burn-out</a>.</p>
   <div class="divider"></div>
   <p>Des repères pour mieux comprendre certains sujets abordés en consultation — anxiété, deuil, couple, burn-out — sans jamais remplacer un accompagnement individualisé.</p>
 </div>

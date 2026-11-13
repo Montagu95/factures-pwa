@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yolène Meignant — Psychologue clinicienne, consultations en visioconférence</title>
-  <meta name="description" content="Yolène Meignant, psychologue clinicienne et psychanalyste. Consultations en visioconférence pour adultes et couples." />
+  <title>Yolène Meignant — Psychologue clinicienne & psychanalyste à Groslay (95) et en visioconférence</title>
+  <meta name="description" content="Psychologue clinicienne et psychanalyste à Groslay et en visioconférence. Consultations pour adultes, couples et enfants : anxiété, deuil, couple, burn-out." />
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -18,7 +18,7 @@
   <meta property="og:url" content="https://www.meignant.net/" />
   <meta property="og:site_name" content="Ouvertures Psy — Yolène Meignant" />
   <meta property="og:title" content="Yolène Meignant — Psychologue clinicienne" />
-  <meta property="og:description" content="Un espace d'écoute au cœur de ce que vous vivez. Consultations en visioconférence pour adultes et couples." />
+  <meta property="og:description" content="Un espace d'écoute au cœur de ce que vous vivez. Consultations en visioconférence pour adultes, couples et enfants." />
   <meta property="og:image" content="https://www.meignant.net/images/og-image.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -26,8 +26,63 @@
   <!-- Aperçu de lien (Twitter / X) -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Yolène Meignant — Psychologue clinicienne" />
-  <meta name="twitter:description" content="Un espace d'écoute au cœur de ce que vous vivez. Consultations en visioconférence pour adultes et couples." />
+  <meta name="twitter:description" content="Un espace d'écoute au cœur de ce que vous vivez. Consultations en visioconférence pour adultes, couples et enfants." />
   <meta name="twitter:image" content="https://www.meignant.net/images/og-image.jpg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "@id": "https://www.meignant.net/#cabinet",
+  "name": "Ouvertures Psy — Yolène Meignant",
+  "url": "https://www.meignant.net/",
+  "description": "Psychologue clinicienne et psychanalyste. Consultations pour adultes, couples et enfants, en visioconférence et par téléphone.",
+  "image": "https://www.meignant.net/images/og-image.jpg",
+  "logo": "https://www.meignant.net/images/logo.jpg",
+  "email": "cabinet@meignant.net",
+  "inLanguage": "fr",
+  "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "RPPS",
+    "value": "10008940586"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "55 Rue du Général Leclerc",
+    "postalCode": "95410",
+    "addressLocality": "Groslay",
+    "addressRegion": "Val-d'Oise",
+    "addressCountry": "FR"
+  },
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "Groslay"
+    },
+    {
+      "@type": "AdministrativeArea",
+      "name": "Val-d'Oise"
+    },
+    {
+      "@type": "Country",
+      "name": "France"
+    }
+  ],
+  "founder": {
+    "@type": "Person",
+    "name": "Yolène Meignant",
+    "jobTitle": "Psychologue clinicienne et psychanalyste",
+    "url": "https://www.meignant.net/"
+  },
+  "knowsAbout": [
+    "Psychothérapie analytique",
+    "Thérapie de couple",
+    "Ethnopsychanalyse",
+    "Anxiété",
+    "Deuil",
+    "Épuisement professionnel"
+  ]
+}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -79,7 +134,7 @@
       font-size: 1rem; font-weight: 600;
       color: var(--mauve);
     }
-    .nav-brand-sub { font-size: 0.72rem; color: var(--muted); }
+    .nav-brand-sub { font-size: 0.8rem; color: var(--muted); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a {
       font-size: 0.85rem; color: var(--muted);
@@ -134,7 +189,7 @@
       display: none;
       background: none; border: none; cursor: pointer;
       width: 40px; height: 40px;
-      align-items: center; justify-content: center;
+      flex-direction: column; align-items: center; justify-content: center;
       border-radius: 8px;
     }
     .nav-burger:hover { background: var(--rose-bg); }
@@ -143,9 +198,9 @@
       background: var(--mauve); margin: 3px 0;
       transition: transform .25s, opacity .25s;
     }
-    .nav-burger.open span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+    .nav-burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .nav-burger.open span:nth-child(2) { opacity: 0; }
-    .nav-burger.open span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     @media (max-width: 860px) {
       .nav-links {
@@ -161,7 +216,7 @@
         transition: max-height .25s ease, opacity .2s ease, padding .25s ease;
       }
       .nav-links.open {
-        max-height: 400px; opacity: 1;
+        max-height: 80vh; overflow-y: auto; opacity: 1;
         padding: 12px 24px 20px;
       }
       .nav-links a { padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -241,7 +296,7 @@
     .scroll-hint {
       position: absolute; bottom: 28px; left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,.6); font-size: 0.75rem;
+      color: rgba(255,255,255,.6); font-size: 0.8rem;
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       animation: bounce 2s infinite;
     }
@@ -252,7 +307,7 @@
     section { padding: 80px 24px; }
     .section-inner { max-width: 1000px; margin: 0 auto; }
     .section-tag {
-      font-size: 0.72rem; letter-spacing: 2px;
+      font-size: 0.8rem; letter-spacing: 2px;
       text-transform: uppercase; color: var(--rose);
       font-weight: 600; margin-bottom: 8px;
     }
@@ -311,7 +366,7 @@
       border-radius: 10px; padding: 12px 16px;
     }
     .credential-icon { font-size: 1.1rem; flex-shrink: 0; }
-    .credential-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+    .credential-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
     .credential-value { font-size: 0.88rem; font-weight: 600; color: var(--mauve); }
 
     /* ── Approche ── */
@@ -423,7 +478,7 @@
     }
     .field { margin-bottom: 16px; }
     .field label {
-      display: block; font-size: 0.75rem;
+      display: block; font-size: 0.8rem;
       font-weight: 600; color: var(--text);
       margin-bottom: 6px; text-transform: uppercase;
       letter-spacing: .5px;
@@ -491,7 +546,7 @@
     }
     .contact-card:hover { box-shadow: 0 6px 20px rgba(201,116,143,.1); }
     .contact-card .icon { font-size: 1.6rem; margin-bottom: 10px; }
-    .contact-card .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
+    .contact-card .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
     .contact-card .value { font-size: 0.88rem; font-weight: 600; color: var(--mauve); }
 
     /* ── Contact layout ── */
@@ -528,6 +583,35 @@
       font-size: 0.8rem; line-height: 1.8;
     }
     footer strong { color: white; }
+  
+
+    /* ── Bandeau d'information (changement d'adresse) ── */
+    .info-adresse { background: var(--rose-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 22px 24px; }
+    .info-adresse-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 16px; align-items: flex-start; }
+    .info-adresse-icon { font-size: 1.6rem; line-height: 1.2; }
+    .info-adresse strong { color: var(--mauve); }
+    .info-adresse p { margin-top: 6px; font-size: 0.95rem; color: var(--text); line-height: 1.6; }
+    .public-card a { color: var(--rose); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    /* ── Accessibilité mobile : cibles tactiles ≥ 48 px, texte ≥ 12 px ── */
+    .nav-brand { min-height: 48px; }
+    .nav-back { display: inline-flex; align-items: center; min-height: 48px; }
+    .nav-burger { width: 48px; height: 48px; flex-shrink: 0; }
+    .nav-dropdown summary { min-height: 48px; display: flex; align-items: center; }
+    .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
+    @media (max-width: 900px) {
+      .nav-links a { min-height: 48px; display: flex; align-items: center; }
+      .nav-links a.nav-cta { justify-content: center; }
+    }
+    input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
+    .human-check { min-height: 48px; }
+    .human-check input[type="checkbox"] { width: 28px; height: 28px; }
+    footer a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; }
+    /* Liens dans un texte : zone de toucher agrandie sans modifier la mise en page */
+    p a, .human-check a, a.inline { display: inline-block; padding: 14px 6px; margin: -14px -6px; }
+    footer a { min-width: 48px; justify-content: center; }
+    .btn-submit { min-height: 48px; }
+    a.nav-brand-name { display: inline-flex; align-items: center; min-height: 48px; }
+    a.contact-lien { min-height: 48px; }
   </style>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
@@ -570,7 +654,7 @@
   <div class="hero-content">
     <div class="hero-tag">Ouvertures Psy · Consultations en visioconférence</div>
     <h1>Un espace d'écoute<br/><em>au cœur de ce que vous vivez</em></h1>
-    <p class="hero-sub">Psychologue clinicienne et psychanalyste, j'accompagne en visioconférence adultes et couples dans les moments difficiles de la vie.</p>
+    <p class="hero-sub">Psychologue clinicienne et psychanalyste, j'accompagne adultes, couples et enfants dans les moments difficiles de la vie, en visioconférence, par téléphone ou, jusqu'au 31 décembre 2026, à mon cabinet de Groslay.</p>
     <div class="hero-btns">
       <a href="#apropos" class="btn-hero-primary">Découvrir mon accompagnement</a>
     </div>
@@ -579,6 +663,19 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 </div>
+
+
+<!-- Information changement d'adresse -->
+<section class="info-adresse" id="information" aria-label="Information : changement d'adresse">
+  <div class="info-adresse-inner">
+    <div class="info-adresse-icon" aria-hidden="true">📍</div>
+    <div>
+      <strong>Changement d'adresse au 1er janvier 2027</strong>
+      <p>L'adresse du cabinet de Groslay change au 1er janvier 2027. Dans l'attente de l'installation dans le nouveau cabinet, les consultations auront lieu <strong>en visioconférence ou par téléphone</strong>. La nouvelle adresse sera communiquée dès qu'elle sera connue.</p>
+      <p>Jusqu'au 31 décembre 2026, les consultations se poursuivent en visioconférence ou au cabinet de Groslay.</p>
+    </div>
+  </div>
+</section>
 
 <!-- À propos -->
 <section id="apropos" class="about">
@@ -596,7 +693,7 @@
         <p class="section-tag">À propos</p>
         <h2 class="section-title">Yolène Meignant</h2>
         <div class="divider"></div>
-        <p>Psychologue clinicienne d'orientation analytique, je reçois en consultation individuelle en visioconférence adultes et couples depuis de nombreuses années.</p>
+        <p>Psychologue clinicienne d'orientation analytique, je reçois adultes, couples et enfants depuis de nombreuses années, en visioconférence, par téléphone ou, jusqu'au 31 décembre 2026, à mon cabinet de Groslay.</p>
         <p>Titulaire d'un Master en Psychopathologie Clinique, ma pratique s'appuie sur la psychothérapie analytique et l'approche systémique dans les thérapies familiales. Ma formation en ethnopsychanalyse enrichit également mon travail auprès de personnes issues de cultures diverses.</p>
         <p>Mon travail consiste en une démarche clinique centrée sur la recherche du conflit intérieur et l'expression des affects — dans un espace de parole sécurisant et bienveillant.</p>
         <div class="about-credentials">
@@ -661,12 +758,17 @@
       <div class="public-card">
         <div class="public-icon">🧍</div>
         <h3>Adultes</h3>
-        <p>Anxiété, dépression, deuil, difficultés relationnelles, développement personnel</p>
+        <p>Anxiété, dépression, deuil, difficultés relationnelles, développement personnel — <a href="/articles/reconnaitre-burn-out.html">reconnaître les signes d'un burn-out</a></p>
       </div>
       <div class="public-card">
         <div class="public-icon">💑</div>
         <h3>Couples</h3>
-        <p>Conflits conjugaux, communication, séparation, reconstruction</p>
+        <p>Conflits conjugaux, communication, séparation, reconstruction — <a href="/articles/therapie-de-couple.html">thérapie de couple : quand consulter ?</a></p>
+      </div>
+      <div class="public-card">
+        <div class="public-icon">🧒</div>
+        <h3>Enfants</h3>
+        <p>Anxiété, difficultés scolaires, troubles du comportement, harcèlement, estime de soi</p>
       </div>
     </div>
   </div>
@@ -872,13 +974,13 @@
         <p class="section-tag">Me contacter</p>
         <h2 class="section-title">Prendre rendez-vous</h2>
         <div class="divider"></div>
-        <p style="color:var(--muted);font-size:.93rem;margin-bottom:4px">Les consultations ont lieu en visioconférence, sur rendez-vous uniquement.</p>
+        <p style="color:var(--muted);font-size:.93rem;margin-bottom:4px">Les consultations ont lieu en visioconférence ou par téléphone, et jusqu'au 31 décembre 2026 également en présentiel à mon cabinet de Groslay, sur rendez-vous uniquement.</p>
         <p style="color:var(--muted);font-size:.82rem;margin-bottom:20px">En cas de problème technique, ou d'un commun accord, la séance peut se dérouler par téléphone (audio).</p>
         <div class="contact-infos">
           <div class="contact-card">
             <div class="icon">💻</div>
             <div class="label">Modalités</div>
-            <div class="value">Visioconférence (ou audio si besoin)</div>
+            <div class="value">Visioconférence ou téléphone (cabinet de Groslay jusqu'au 31/12/2026)</div>
           </div>
           <div class="contact-card">
             <div class="icon">🕐</div>
@@ -957,8 +1059,8 @@
   Psychologue clinicienne · Psychanalyste<br/>
   RPPS 10008940586 · SIRET 450 801 188 00043<br/>
   55 Rue du Général Leclerc · 95410 Groslay<br/>
-  <span style="margin-top:8px;display:block;font-size:.75rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.32</span>
-  <span style="margin-top:4px;display:block;font-size:.75rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
+  <span style="margin-top:8px;display:block;font-size:.8rem;opacity:.6">© 2026 Ouvertures Psy · Toutes les consultations sont soumises au secret professionnel · v1.11.44</span>
+  <span style="margin-top:4px;display:block;font-size:.8rem;"><a href="/mentions-legales.html" style="color:inherit;">Mentions légales</a> · <a href="/politique-de-confidentialite.html" style="color:inherit;">Politique de confidentialité</a> · <a href="/cgv.html" style="color:inherit;">CGV</a></span>
 </footer>
 
 <script>

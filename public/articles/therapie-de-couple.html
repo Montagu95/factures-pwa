@@ -25,6 +25,66 @@
   <meta name="twitter:description" content="Conflits récurrents, communication difficile, envie de faire le point : dans quelles situations la thérapie de couple peut-elle aider ?" />
   <meta name="twitter:image" content="https://www.meignant.net/images/og-image.jpg" />
 
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Thérapie de couple : quand et pourquoi consulter ?",
+  "description": "Conflits récurrents, communication difficile, envie de faire le point : dans quelles situations la thérapie de couple peut-elle aider ?",
+  "inLanguage": "fr",
+  "author": {
+    "@type": "Person",
+    "name": "Yolène Meignant",
+    "url": "https://www.meignant.net/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ouvertures Psy — Yolène Meignant",
+    "url": "https://www.meignant.net/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.meignant.net/images/logo.jpg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.meignant.net/articles/therapie-de-couple.html"
+  },
+  "image": "https://www.meignant.net/images/og-image.jpg"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quand consulter en couple ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Les motifs sont variés : des disputes qui reviennent toujours sur les mêmes sujets, un sentiment d'éloignement progressif, une crise déclenchée par un événement précis (infidélité, naissance, deuil, changement professionnel) ou l'impression de ne plus se comprendre. Certains couples consultent aussi en prévention, à un moment charnière de leur vie commune."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Que fait le thérapeute lors d'une thérapie de couple ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Son rôle n'est pas de déterminer qui a raison ou qui doit changer, mais de restaurer un espace où chacun peut être entendu sans être interrompu, et de rendre visibles des dynamiques relationnelles que les deux partenaires reproduisent parfois sans en avoir conscience."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Peut-on consulter en couple quand on doute de l'avenir de la relation ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. La thérapie de couple n'a pas pour objectif de sauver le couple à tout prix : elle peut aussi accompagner une séparation, avec moins de violence et de non-dits, ce qui compte particulièrement lorsqu'il y a des enfants. Venir consulter à deux, même en étant incertain, reste une démarche légitime."
+      }
+    }
+  ]
+}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -69,7 +129,7 @@
 
     main { max-width: 720px; margin: 0 auto; padding: 48px 24px 40px; }
     .article-tag {
-      display: inline-block; font-size: 0.72rem; letter-spacing: 1px;
+      display: inline-block; font-size: 0.8rem; letter-spacing: 1px;
       text-transform: uppercase; color: var(--rose); font-weight: 600;
       background: var(--rose-bg); padding: 5px 12px; border-radius: 20px;
       margin-bottom: 16px;
@@ -111,6 +171,36 @@
       text-align: center; padding: 32px 24px; font-size: 0.85rem;
     }
     footer a { color: rgba(255,255,255,.85); }
+  
+
+    /* ── Appel à l'action en haut d'article + articles liés ── */
+    .cta-top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin: 0 0 28px; padding: 14px 16px; background: var(--rose-bg); border: 1px solid var(--border); border-radius: 12px; }
+    .cta-top a.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; background: var(--rose); color: #fff; border-radius: 999px; font-weight: 600; text-decoration: none; }
+    .cta-top span { font-size: 0.9rem; color: var(--muted); }
+    .related { margin-top: 36px; }
+    .related h2 { font-size: 1.15rem; }
+    .related ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .related a { display: inline-flex; align-items: center; min-height: 48px; color: var(--rose); font-weight: 600; text-decoration: none; }
+    /* ── Accessibilité mobile : cibles tactiles ≥ 48 px, texte ≥ 12 px ── */
+    .nav-brand { min-height: 48px; }
+    .nav-back { display: inline-flex; align-items: center; min-height: 48px; }
+    .nav-burger { width: 48px; height: 48px; }
+    .nav-dropdown summary { min-height: 48px; display: flex; align-items: center; }
+    .nav-dropdown-menu a { min-height: 48px; display: flex; align-items: center; }
+    @media (max-width: 900px) {
+      .nav-links a { min-height: 48px; display: flex; align-items: center; }
+    }
+    input:not([type="checkbox"]):not([type="hidden"]), select, textarea { min-height: 48px; }
+    .human-check { min-height: 48px; }
+    .human-check input[type="checkbox"] { width: 28px; height: 28px; }
+    footer a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; }
+    /* Liens dans un texte : zone de toucher agrandie sans modifier la mise en page */
+    p a, .human-check a, a.inline { display: inline-block; padding: 14px 6px; margin: -14px -6px; }
+    footer a { min-width: 48px; justify-content: center; }
+    .btn-submit { min-height: 48px; }
+    a.nav-brand-name { display: inline-flex; align-items: center; min-height: 48px; }
+    a.contact-lien { min-height: 48px; }
+    .back-link a { display: inline-flex; align-items: center; min-height: 48px; }
   </style>
 </head>
 <body>
@@ -131,17 +221,22 @@
   <h1>Thérapie de couple : quand et pourquoi consulter ?</h1>
   <p class="article-meta">Par Yolène Meignant · Temps de lecture estimé : 4 min</p>
 
+  <div class="cta-top">
+    <a class="btn" href="/#contact">Prendre rendez-vous</a>
+    <span>Consultations en visioconférence ou par téléphone</span>
+  </div>
+
   <p>Les couples qui poussent la porte d'un cabinet le font rarement sur un coup de tête. C'est souvent après des mois, parfois des années, à tourner en rond autour des mêmes désaccords, sans parvenir à en sortir seuls. La thérapie de couple n'est pas un dernier recours réservé aux situations désespérées : c'est un espace pour retravailler ce qui, dans le dialogue, s'est grippé.</p>
 
-  <h2>Les situations qui amènent les couples à consulter</h2>
+  <h2>Quand consulter en couple ? Les situations qui amènent les couples à consulter</h2>
   <p>Les motifs sont variés : des disputes qui reviennent toujours sur les mêmes sujets sans jamais se résoudre, un sentiment d'éloignement progressif, une crise déclenchée par un événement précis — infidélité, naissance, deuil, changement professionnel — ou simplement l'impression de ne plus se comprendre.</p>
   <p>Certains couples viennent aussi en prévention, à un moment charnière de leur vie commune, pour consolider ce qui fonctionne avant qu'une difficulté ne s'installe.</p>
 
-  <h2>Le rôle du thérapeute : ni juge, ni arbitre</h2>
+  <h2>Que fait le thérapeute en thérapie de couple ? Ni juge, ni arbitre</h2>
   <p>Mon rôle en séance de couple n'est pas de déterminer qui a raison ou qui doit changer. Il s'agit plutôt de restaurer un espace où chacun peut être entendu sans être interrompu ou immédiatement contredit, et de rendre visibles des dynamiques relationnelles que les deux partenaires reproduisent parfois depuis longtemps sans en avoir conscience.</p>
   <p>C'est un travail sur la relation elle-même, plus que sur les torts respectifs de chacun.</p>
 
-  <h2>Consulter à deux, même en cas de doute sur l'avenir du couple</h2>
+  <h2>Peut-on consulter en couple quand on doute de l'avenir de la relation ?</h2>
   <p>La thérapie de couple n'a pas pour objectif systématique de « sauver » le couple à tout prix. Elle peut tout autant accompagner une séparation, lorsque celle-ci devient la meilleure issue, en aidant à ce qu'elle se passe avec moins de violence et de non-dits — ce qui compte particulièrement lorsqu'il y a des enfants.</p>
   <p>Venir consulter à deux, même en étant incertain sur l'avenir de la relation, reste une démarche légitime.</p>
 
@@ -149,6 +244,15 @@
   <div class="cta">
     <p>Vous vous reconnaissez dans ce que vous venez de lire ?</p>
     <a class="btn" href="/#contact">Prendre contact</a>
+  </div>
+
+
+  <div class="related">
+    <h2>À lire aussi</h2>
+    <ul>
+    <li><a href="/articles/reconnaitre-burn-out.html">Reconnaître les signes d'un épuisement professionnel (burn-out)</a></li>
+    <li><a href="/articles/anxiete-envahissante.html">Anxiété : quand la vigilance normale devient envahissante</a></li>
+    </ul>
   </div>
 
   <p class="disclaimer">Cet article a une visée informative et générale. Il ne remplace pas un avis médical ou psychologique individualisé, ni une consultation.</p>
