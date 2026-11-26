@@ -36,6 +36,8 @@
     header .sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
     main { flex: 1; position: relative; display: flex; }
+    .rgpd-visio { text-align: center; padding: 4px 16px; font-size: 0.78rem; background: white; border-top: 1px solid var(--border); }
+    .rgpd-visio a { color: var(--muted); display: inline-flex; align-items: center; min-height: 48px; padding: 0 8px; text-decoration: underline; }
 
     whereby-embed { flex: 1; width: 100%; }
 
@@ -111,6 +113,10 @@
     <a class="btn-retour" href="/">Retour à l'accueil</a>
   </div>
 </main>
+
+<footer class="rgpd-visio">
+  <a href="/politique-de-confidentialite.html#teleconsultation" target="_blank" rel="noopener">Confidentialité de la séance et protection de vos données</a>
+</footer>
 
 <script type="module">
   const params    = new URLSearchParams(window.location.search);

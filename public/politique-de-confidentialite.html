@@ -63,6 +63,7 @@
       margin-top: 36px; margin-bottom: 12px;
       padding-bottom: 8px; border-bottom: 1px solid var(--border);
     }
+    h3 { font-size: 1rem; color: var(--mauve); margin: 22px 0 8px; font-weight: 700; }
     p { margin-bottom: 12px; font-size: 0.94rem; }
     ul { margin: 0 0 12px 20px; font-size: 0.94rem; }
     li { margin-bottom: 6px; }
@@ -122,7 +123,7 @@
 
 <main>
   <h1>Politique de confidentialité</h1>
-  <p class="updated">Dernière mise à jour : août 2026</p>
+  <p class="updated">Dernière mise à jour : novembre 2026</p>
 
   <h2>1. Responsable du traitement</h2>
   <ul>
@@ -149,6 +150,7 @@
   <h2>3. Destinataires et sous-traitants</h2>
   <ul>
     <li>Hébergeur : Vercel Inc. (États-Unis) — hébergement du site et des fonctions serveur</li>
+    <li>Visioconférence : Whereby (société norvégienne) — service de visioconférence utilisé pour les séances en vidéo, conforme au RGPD. Ses serveurs principaux et ses données sont hébergés dans l'Union européenne (Irlande). Les flux audio et vidéo sont chiffrés. Les séances ne sont pas enregistrées : leur contenu n'est ni conservé ni accessible après la séance. Seul le prénom du patient est transmis, comme nom d'affichage dans la salle ; la salle est créée pour la séance et expire automatiquement.</li>
     <li>Envoi des emails : Brevo (Europe) — serveur SMTP utilisé pour l'envoi des emails transactionnels (confirmations, factures, alertes)</li>
     <li>Base de données : Upstash (fournisseur du service Redis utilisé pour stocker les données patients et factures, gérées par ailleurs via l'application de facturation)</li>
     <li>Mesure d'audience : Vercel Web Analytics — outil de statistiques de fréquentation, sans dépôt de cookie (voir section 7)</li>
@@ -166,6 +168,12 @@
   </ul>
   <p>
     Ces transferts s'appuient sur le Data Privacy Framework UE-États-Unis (DPF), auquel Vercel Inc. et Upstash adhèrent.
+  </p>
+  <p>
+    Pour les séances en visioconférence, Whereby héberge ses serveurs principaux et ses bases de données dans l'Union européenne (Irlande). Les flux audio et vidéo sont acheminés par des serveurs de routage média (WebRTC / SFU) répartis dans plusieurs régions du monde, notamment en Europe (Francfort, Londres, Irlande), aux États-Unis et en Asie, afin de garantir une faible latence.
+  </p>
+  <p>
+    Lorsque la séance a lieu entre deux participants situés en Europe, le flux transite en principe par les serveurs européens les plus proches. En revanche, si le patient se connecte depuis un territoire éloigné de l'Europe (par exemple l'outre-mer), le routage vidéo peut transiter par un nœud média situé dans sa zone géographique, afin de maintenir la qualité de la connexion. Dans tous les cas, les flux circulent chiffrés et ne sont ni enregistrés ni conservés.
   </p>
 
   <h2>5. Durées de conservation</h2>
@@ -211,9 +219,35 @@
     Ce site utilise Vercel Web Analytics pour mesurer sa fréquentation. Selon la documentation de son éditeur, cet outil ne dépose aucun cookie : les visites sont identifiées par un hash calculé à partir de la requête entrante, sans lien avec une identité, et les données de session sont supprimées après 24 heures. Aucun autre cookie de suivi, publicitaire ou tiers n'est utilisé sur ce site. En l'absence de cookie nécessitant un consentement, aucun bandeau cookies n'est affiché.
   </p>
 
-  <h2>8. Mise à jour</h2>
+  <h2 id="teleconsultation">8. Téléconsultation : protection des données et confidentialité</h2>
+
+  <h3>Responsable du traitement</h3>
+  <p>Les données collectées lors de l'accès à la salle de téléconsultation sont traitées sous la responsabilité de Yolène Meignant (EI Yolène Meignant), psychologue clinicienne (N° RPPS : 10008940586), exerçant à titre libéral. L'adresse professionnelle et l'adresse e-mail de contact sont indiquées à la section 1 (cabinet@meignant.net).</p>
+
+  <h3>Finalité et base légale</h3>
+  <p>Le dispositif de visioconférence a pour unique finalité l'organisation et la réalisation des consultations psychologiques à distance. Ce traitement repose sur :</p>
+  <ul>
+    <li>l'exécution de la relation de soins et de suivi psychologique convenue avec le patient (article 6.1.b du RGPD) ;</li>
+    <li>le cadre de la prise en charge sanitaire par un professionnel de santé soumis au secret professionnel (article 9.2.h du RGPD et Code de déontologie des psychologues).</li>
+  </ul>
+
+  <h3>Sécurité des échanges et sous-traitance technique (Whereby)</h3>
+  <p>Les téléconsultations s'appuient sur la solution technique Whereby (société Whereby AS, enregistrée en Norvège, au sein de l'Espace Économique Européen).</p>
+  <ul>
+    <li><strong>Confidentialité et chiffrement :</strong> les flux audio et vidéo sont chiffrés (protocole WebRTC) et transitent en temps réel. Aucune consultation n'est enregistrée, ni en audio, ni en vidéo.</li>
+    <li><strong>Hébergement et absence de conservation médicale :</strong> les serveurs principaux de Whereby sont hébergés au sein de l'Union européenne (AWS Irlande). Whereby agit exclusivement en qualité de sous-traitant technique pour la transmission des flux ; aucune note clinique ni donnée médicale n'est conservée sur cette plateforme. Des serveurs de transmission des flux en temps réel peuvent être situés hors de l'Union européenne (voir la section 4).</li>
+    <li><strong>Données techniques collectées :</strong> seules les données strictement nécessaires à la connexion (identifiant de session, nom d'affichage — votre prénom —, adresse IP et journaux techniques temporaires) sont traitées le temps de la séance, conformément à l'accord de traitement des données (DPA) conclu avec le prestataire.</li>
+  </ul>
+
+  <h3>Bonnes pratiques de confidentialité recommandées au patient</h3>
+  <p>Afin de préserver le secret des échanges, il est recommandé de vous connecter depuis un lieu calme et isolé, à l'aide d'un appareil personnel et d'une connexion internet sécurisée, et d'éviter de transmettre des documents médicaux sensibles via la messagerie instantanée de la fenêtre vidéo.</p>
+
+  <h3>Vos droits</h3>
+  <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi « Informatique et Libertés », vous disposez d'un droit d'accès, de rectification, de limitation et d'effacement des données personnelles vous concernant, ainsi que du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>). Pour toute question relative à vos données, vous pouvez contacter directement votre praticienne à l'adresse mentionnée ci-dessus.</p>
+
+  <h2>9. Mise à jour</h2>
   <p>
-    Dernière mise à jour : août 2026. Cette politique peut être modifiée à tout moment, notamment pour refléter une évolution du site ou de la réglementation. La version en vigueur est celle accessible sur cette page.
+    Dernière mise à jour : novembre 2026. Cette politique peut être modifiée à tout moment, notamment pour refléter une évolution du site ou de la réglementation. La version en vigueur est celle accessible sur cette page.
   </p>
 </main>
 
