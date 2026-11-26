@@ -1,0 +1,12 @@
+{
+  "name": "Backoffice — Ouvertures Psy",
+  "short_name": "Backoffice",
+  "start_url": "/backoffice",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf7f5",
+  "theme_color": "#c9748f",
+  "icons": [
+    { "src": "/apple-touch-icon-backoffice.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
