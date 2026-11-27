@@ -41,6 +41,19 @@
 
     whereby-embed { flex: 1; width: 100%; }
 
+    /* Photo de la praticienne (option « caméra coupée ») : superposée dans la
+       moitié haute de la zone d'appel, sans capter les clics, pour laisser
+       libres la vignette du patient et la barre de boutons en bas. */
+    .photo-praticienne {
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      display: none; align-items: center; justify-content: center;
+      padding: 12px; pointer-events: none; z-index: 5;
+    }
+    .photo-praticienne img {
+      max-width: 70%; max-height: 100%; object-fit: contain;
+      border-radius: 16px; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    }
+
     /* Écran superposé : attente / erreur / fin de consultation */
     .overlay {
       position: absolute; inset: 0;
@@ -93,6 +106,8 @@
 
 <main id="main">
   <!-- Le composant Whereby est ajouté dynamiquement en JS une fois le lien validé -->
+
+  <div class="photo-praticienne" id="photoPraticienne"><img src="/images/yolene_praticienne_visio.jpg" alt="Votre praticienne"></div>
 
   <div class="bandeau-attente" id="bandeauAttente" style="display:none">
     <span class="pulse" style="margin-top:0"></span>
@@ -152,6 +167,8 @@
     const displayName = prenom ? prenom : 'Patient';
     embed.setAttribute('room', roomUrl + (roomUrl.includes('?') ? '&' : '?') + 'minimal&leaveButton=on&people=off&floatSelf=on&lang=fr&displayName=' + encodeURIComponent(displayName));
     main.insertBefore(embed, bandeauAttente);
+    // Option « caméra coupée » côté praticienne : on affiche sa photo en grand
+    if (params.get('photo') === '1') document.getElementById('photoPraticienne').style.display = 'flex';
 
     let sessionTerminee = false;
 
