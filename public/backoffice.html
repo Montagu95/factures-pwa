@@ -91,17 +91,37 @@
 
   <footer>Chaque outil s'ouvre dans son application dédiée.</footer>
   <script>
-    // Réutilise l'onglet déjà ouvert pour chaque outil (fenêtre nommée) au lieu
-    // d'en ouvrir un nouveau à chaque clic. Les outils sont des domaines du cabinet
-    // (meignant.net) : on garde donc le lien d'ouverture (pas de noopener), sinon le
-    // navigateur ne retrouve pas la fenêtre déjà ouverte.
+    // Un seul onglet par outil, toujours remis au premier plan.
+    // Un navigateur ne laisse pas une page donner le focus à un autre onglet :
+    // naviguer dans l'onglet déjà ouvert le laisserait en arrière-plan. On referme
+    // donc l'onglet de l'outil (ouvert par cette page) puis on le rouvre : il passe
+    // au premier plan et il n'y en a jamais deux. L'outil est rechargé à chaque fois.
+    var ouvertes = {};
+
+    function ouvrirOutil(url, nom) {
+      var existante = ouvertes[nom];
+      if (!existante) {
+        // Onglet éventuellement ouvert avant un rechargement de cette page : on le retrouve par son nom.
+        try {
+          var x = window.open('', nom);
+          if (x) {
+            var vide = false;
+            try { vide = (x.location.href === 'about:blank'); } catch (_) { vide = false; } // illisible = outil déjà chargé
+            if (vide) { x.location.href = url; ouvertes[nom] = x; return; } // onglet vierge créé à l'instant, déjà au premier plan
+            existante = x;
+          }
+        } catch (_) {}
+      }
+      if (existante && !existante.closed) { try { existante.close(); } catch (_) {} }
+      var n = window.open(url, nom);
+      if (n) { ouvertes[nom] = n; } else { window.location.href = url; }
+    }
+
     document.querySelectorAll('a.carte[data-fenetre]').forEach(function (a) {
       a.addEventListener('click', function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
         e.preventDefault();
-        var w = window.open(a.href, a.getAttribute('data-fenetre'));
-        if (w) { try { w.focus(); } catch (_) {} }
-        else { window.location.href = a.href; }
+        ouvrirOutil(a.href, a.getAttribute('data-fenetre'));
       });
     });
   </script>
